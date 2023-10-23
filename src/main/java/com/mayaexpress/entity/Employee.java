@@ -1,8 +1,11 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
+import java.util.Collection;
 
 @Entity
 @Table(name="EMPLOYEE")
@@ -33,4 +36,8 @@ public class Employee {
 
     @Column(name="password", nullable = false)
     private String password;
+
+    public BigDecimal getId() {
+        return id;
+    }
 }

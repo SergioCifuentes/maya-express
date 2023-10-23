@@ -11,4 +11,14 @@ public class TestController {
     public ResponseEntity<?> testController(){
         return ResponseEntity.ok("Hey baby, I love you so bad <3");
     }
+
+    @GetMapping("/user")
+    public String helloUser(){
+        return "Hello User";
+    }
+
+    @GetMapping("/admin")
+    public String helloAdmin(){
+        return "Hello Admin";
+    }
 }
