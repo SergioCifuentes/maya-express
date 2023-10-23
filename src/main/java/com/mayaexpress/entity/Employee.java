@@ -13,6 +13,7 @@ import java.util.Collection;
 @Table(name="EMPLOYEE")
 public class Employee {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id", scale = 0, precision = 13)
     private BigDecimal id;
 
