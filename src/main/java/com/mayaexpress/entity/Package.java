@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 public class Package {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
 
