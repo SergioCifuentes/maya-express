@@ -2,6 +2,7 @@ package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,6 +11,7 @@ import java.util.Collection;
 
 @Entity
 @Getter
+@Setter
 @Table(name="EMPLOYEE")
 public class Employee {
     @Id
@@ -26,13 +28,14 @@ public class Employee {
     @Column(name="hours_x_day",nullable = false, scale = 1, precision = 2)
     private BigDecimal hoursPerDay;
 
+    @Column(name = "is_enable", nullable = false)
+    private boolean isEnable;
 
     @Column(name="role")
     private Role role;
 
     @ManyToOne
     private Position position;
-
 
     @Column(name = "username", nullable = false)
     private String username;

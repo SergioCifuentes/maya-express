@@ -1,8 +1,12 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity(name = "Position")
+@Getter
+@Setter
 @Table(name = "POSITION")
 public class Position {
     @Id
