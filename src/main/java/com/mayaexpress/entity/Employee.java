@@ -3,6 +3,7 @@ package com.mayaexpress.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -25,9 +26,11 @@ public class Employee {
     @Column(name="last_name", nullable = false)
     private String lastName;
 
+
     @Column(name="hours_x_day",nullable = false, scale = 1, precision = 2)
     private BigDecimal hoursPerDay;
 
+    @ColumnDefault("true")
     @Column(name = "is_enable", nullable = false)
     private boolean isEnable;
 

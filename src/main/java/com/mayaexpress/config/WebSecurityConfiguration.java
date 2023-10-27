@@ -50,6 +50,8 @@ public class WebSecurityConfiguration {
                         .requestMatchers("/test").permitAll()
                         .requestMatchers("/admin-user").permitAll()
                         .requestMatchers("/api/admin/**").permitAll()
+                        .requestMatchers("/api-docs/**").permitAll()
+                        .requestMatchers("/swagger-ui/**").permitAll()
                         .anyRequest().authenticated()
 
                 );
