@@ -22,5 +22,6 @@ public class Branch {
 
     @Column(name="vehicule_day")
     private DayOfTheWeek vehicleDay;
+    
 
 }
