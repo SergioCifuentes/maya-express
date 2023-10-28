@@ -1,11 +1,15 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Date;
 
 @Entity(name = "Cost")
 @Table(name="COST")
+@Getter
+@Setter
 public class Cost {
 
     @Id
@@ -23,4 +27,6 @@ public class Cost {
     @Column(name="description")
     private String description;
 
+    @ManyToOne
+    private CostType costType;
 }
