@@ -1,5 +1,6 @@
 package com.mayaexpress.service;
 
+import com.mayaexpress.entity.Branch;
 import com.mayaexpress.entity.Employee;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.exception.EmployeeNotFoundException;
@@ -21,14 +22,16 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
+    private final BranchService branchService;
     private final MergeEntity<Employee> merge;
 
     private final PasswordEncoder encoder;
 
-    public EmployeeService(EmployeeRepository employeeRepository, PasswordEncoder encoder) {
+    public EmployeeService(EmployeeRepository employeeRepository, PasswordEncoder encoder, BranchService branchService) {
         this.employeeRepository = employeeRepository;
         this.encoder = encoder;
         this.merge = new MergeEntity<>();
+        this.branchService = branchService;
     }
 
     public void create(Employee employee) {
@@ -77,5 +80,12 @@ public class EmployeeService {
             throw new APIException(HttpStatus.NOT_FOUND, "Employee not found.");
         }
         return employeeDB.get();
+    }
+
+    public Employee assignEmployee(BigDecimal idEmployee, Integer idBranch) {
+        Branch branch = branchService.get(idBranch);
+        Employee employee = get(idEmployee);
+        employee.setBranch(branch);
+        return employeeRepository.save(employee);
     }
 }

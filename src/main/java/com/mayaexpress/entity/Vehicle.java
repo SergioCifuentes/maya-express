@@ -1,9 +1,13 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 @Entity(name="Vehicle")
 @Table(name = "VEHICLE")
+@Getter
+@Setter
 public class Vehicle {
 
     @Id
@@ -22,7 +26,6 @@ public class Vehicle {
     @Column(name = "max_weight")
     private Integer maxWeight;
 
-
-
-
+    @ManyToOne
+    private Branch branch;
 }
