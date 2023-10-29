@@ -40,6 +40,9 @@ public class Employee {
     @ManyToOne
     private Position position;
 
+    @ManyToOne
+    private Branch branch;
+
     @Column(name = "username", nullable = false)
     private String username;
 

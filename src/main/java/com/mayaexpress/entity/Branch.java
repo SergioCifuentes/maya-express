@@ -1,11 +1,15 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 
 @Entity
 @Table(name="BRANCH")
+@Getter
+@Setter
 public class Branch {
 
     @Id
