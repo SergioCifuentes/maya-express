@@ -45,7 +45,7 @@ public class WebSecurityConfiguration {
                 .exceptionHandling(exc -> exc.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authz) -> authz
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/user").permitAll()
                         .requestMatchers("/test").permitAll()
                         .requestMatchers("/admin-user").permitAll()

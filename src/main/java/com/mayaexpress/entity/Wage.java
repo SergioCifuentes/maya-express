@@ -15,7 +15,7 @@ public class Wage {
     @Column(name="id")
     private Integer id;
 
-    @Column(name="per_hour", scale = 5, precision = 2)
+    @Column(name="per_hour", scale = 2, precision = 8)
     private BigDecimal perHour;
 
 

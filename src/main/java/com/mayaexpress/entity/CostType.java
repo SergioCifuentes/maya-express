@@ -1,10 +1,13 @@
 package com.mayaexpress.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 
+@Entity(name = "COST_TYPE")
+@Table(name="CostType")
+@Getter
+@Setter
 public class CostType {
 
     @Id
