@@ -1,12 +1,18 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity(name="Warehouse")
 @Table(name = "WAREHOUSE")
+@Getter
+@Setter
 public class Warehouse {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
     private Integer id;
 
@@ -19,9 +25,10 @@ public class Warehouse {
     @Column(name = "max_weight_lbs", nullable = false)
     private Integer maxWeightLbs;
 
+    @ColumnDefault("true")
+    @Column(name = "is_enable", nullable = false)
+    private boolean isEnable;
+
     @OneToOne(mappedBy = "warehouse")
     private Branch branch;
-
-
-
 }
