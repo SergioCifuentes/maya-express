@@ -21,7 +21,7 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private MergeEntity<Employee> merge;
+    private final MergeEntity<Employee> merge;
 
     private final PasswordEncoder encoder;
 
@@ -69,5 +69,13 @@ public class EmployeeService {
         }
         employee.get().setEnable(false);
         employeeRepository.save(employee.get());
+    }
+
+    public Employee get(BigDecimal id) {
+        Optional<Employee> employeeDB = employeeRepository.findById(id);
+        if (employeeDB.isEmpty()) {
+            throw new APIException(HttpStatus.NOT_FOUND, "Employee not found.");
+        }
+        return employeeDB.get();
     }
 }

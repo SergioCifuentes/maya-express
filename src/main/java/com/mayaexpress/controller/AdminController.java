@@ -87,4 +87,13 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @GetMapping("/employee/{id}/")
+    public ResponseEntity<Employee> get(@Valid @PathVariable BigDecimal id){
+        try {
+            return ResponseEntity.ok(employeeService.get(id));
+        } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
