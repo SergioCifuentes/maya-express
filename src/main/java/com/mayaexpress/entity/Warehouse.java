@@ -1,5 +1,6 @@
 package com.mayaexpress.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,6 +10,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Table(name = "WAREHOUSE")
 @Getter
 @Setter
+
 public class Warehouse {
 
     @Id
@@ -29,6 +31,7 @@ public class Warehouse {
     @Column(name = "is_enable", nullable = false)
     private boolean isEnable;
 
+    @JsonIgnore
     @OneToOne(mappedBy = "warehouse")
     private Branch branch;
 }
