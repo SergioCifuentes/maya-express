@@ -1,9 +1,11 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity(name="Destination")
 @Table(name="DESTINATION")
+@Getter
 public class Department {
 
     @Id

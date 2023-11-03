@@ -1,17 +1,22 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity(name="Vehicle")
 @Table(name = "VEHICLE")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vehicle {
 
     @Id
     @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(name="plate", unique = true, nullable = false)
@@ -20,12 +25,12 @@ public class Vehicle {
     @Column(name="vehicle_type")
     private VehiculeType vehicleType;
 
-    @ManyToOne(optional = true)
-    private Shipment shipment;
+    @ManyToOne
+    private Branch branch;
 
     @Column(name = "max_weight")
     private Integer maxWeight;
 
-    @ManyToOne
-    private Branch branch;
+
+
 }

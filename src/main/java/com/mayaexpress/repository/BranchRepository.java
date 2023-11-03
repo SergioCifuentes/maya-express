@@ -8,4 +8,5 @@ import org.springframework.web.context.annotation.RequestScope;
 @Repository
 @RequestScope
 public interface BranchRepository extends JpaRepository<Branch, Integer> {
+
 }

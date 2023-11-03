@@ -3,7 +3,9 @@ package com.mayaexpress.controller;
 import com.mayaexpress.dto.request.EmployeeAssignmentDTO;
 import com.mayaexpress.dto.request.VehicleAssignmentDTO;
 import com.mayaexpress.entity.Employee;
+import com.mayaexpress.entity.Position;
 import com.mayaexpress.entity.Vehicle;
+import com.mayaexpress.entity.Wage;
 import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.EmployeeService;
 import com.mayaexpress.service.VehicleService;
@@ -18,6 +20,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.math.BigDecimal;
 import java.net.URI;
+import java.util.List;
 
 @RestController()
 @RequestMapping("/api/admin")
@@ -30,7 +33,7 @@ public class AdminController {
         this.vehicleService = vehicleService;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
+    //@PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/employee")
     public ResponseEntity<Employee> create(@Valid @RequestBody Employee employee){
         try {
@@ -123,4 +126,44 @@ public class AdminController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/employee/position/")
+    public ResponseEntity<List<Position>> getPositions(){
+        try{
+            return ResponseEntity.ok(employeeService.getPositions());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/employee/position/{id}")
+    public ResponseEntity<Position> getPosition(@Valid @PathVariable Integer id){
+        return ResponseEntity.ok(employeeService.getPosition(id));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/employee/wage/")
+    public ResponseEntity<List<Wage>> getWages(){
+        try{
+            return ResponseEntity.ok(employeeService.getWages());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/employee/wage/{id}")
+    public ResponseEntity<Wage> getWage(@Valid @PathVariable Integer id){
+        return ResponseEntity.ok(employeeService.getWage(id));
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/employee/wage/position/{id}")
+    public ResponseEntity<Wage> getWageByPosition(@Valid @PathVariable Integer id){
+        return ResponseEntity.ok(employeeService.getWageByPosition(id));
+    }
+
+
 }

@@ -1,14 +1,17 @@
 package com.mayaexpress.service;
 
-import com.mayaexpress.entity.Branch;
-import com.mayaexpress.entity.Employee;
+import com.mayaexpress.entity.*;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.exception.EmployeeNotFoundException;
+import com.mayaexpress.exception.ResourceNotFoundException;
 import com.mayaexpress.repository.EmployeeRepository;
+import com.mayaexpress.repository.PositionRepository;
+import com.mayaexpress.repository.WageRepository;
 import com.mayaexpress.util.MergeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,11 +30,19 @@ public class EmployeeService {
 
     private final PasswordEncoder encoder;
 
-    public EmployeeService(EmployeeRepository employeeRepository, PasswordEncoder encoder, BranchService branchService) {
+    private final PositionRepository positionRepository;
+
+    private final WageRepository wageRepository;
+
+    public EmployeeService(EmployeeRepository employeeRepository, PasswordEncoder encoder,
+                           BranchService branchService, PositionRepository positionRepository, WageRepository wageRepository) {
         this.employeeRepository = employeeRepository;
         this.encoder = encoder;
         this.merge = new MergeEntity<>();
         this.branchService = branchService;
+        this.positionRepository=positionRepository;
+        this.wageRepository=wageRepository;
+
     }
 
     public void create(Employee employee) {
@@ -88,4 +99,31 @@ public class EmployeeService {
         employee.setBranch(branch);
         return employeeRepository.save(employee);
     }
+
+    public List<Position> getPositions(){
+        return positionRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public Position getPosition(Integer id){
+        Optional<Position> position = positionRepository.findById(id);
+        if (position.isEmpty()) throw new ResourceNotFoundException("Position","id",id);
+        return position.get();
+    }
+
+    public List<Wage> getWages(){
+        return wageRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+    }
+
+    public Wage getWage(Integer id){
+        Optional<Wage> wage = wageRepository.findById(id);
+        if (wage.isEmpty()) throw new ResourceNotFoundException("Wage","id",id);
+        return wage.get();
+    }
+
+    public Wage getWageByPosition(Integer id){
+        Optional<Position> position = positionRepository.findById(id);
+        if (position.isEmpty()) throw new ResourceNotFoundException("Position","id",id);
+        return position.get().getWage();
+    }
+
 }
