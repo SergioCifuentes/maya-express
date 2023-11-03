@@ -1,8 +1,11 @@
 package com.mayaexpress.service;
 
 import com.mayaexpress.dto.request.BranchDTO;
+import com.mayaexpress.dto.request.PackageDTO;
+import com.mayaexpress.dto.request.ShipmentDTO;
 import com.mayaexpress.dto.request.VehicleDTO;
 import com.mayaexpress.entity.*;
+import com.mayaexpress.entity.Package;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.exception.ResourceNotFoundException;
 import com.mayaexpress.repository.*;
@@ -10,8 +13,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class ShipmentService {
@@ -25,14 +31,22 @@ public class ShipmentService {
 
     private final VehicleRepository vehicleRepository;
 
+    private final ShipmentRepository shipmentRepository;
+
+    private final PackageRepository packageRepository;
+
     public ShipmentService(DestinationRepository destinationRepository, PriceRepository priceRepository,
-                           BranchRepository branchRepository, WarehouseRepository warehouseRepository, VehicleRepository vehicleRepository) {
+                           BranchRepository branchRepository, WarehouseRepository warehouseRepository, VehicleRepository vehicleRepository,
+                           ShipmentRepository shipmentRepository, PackageRepository packageRepository) {
         this.destinationRepository = destinationRepository;
         this.priceRepository = priceRepository;
         this.branchRepository=branchRepository;
         this.warehouseRepository=warehouseRepository;
         this.vehicleRepository=vehicleRepository;
+        this.shipmentRepository=shipmentRepository;
+        this.packageRepository=packageRepository;
     }
+
 
 
     public List<Department> getDepartments(){
@@ -156,5 +170,28 @@ public class ShipmentService {
         Optional<Vehicle> vehicle = vehicleRepository.findById(id);
         if (vehicle.isEmpty()) throw new ResourceNotFoundException("Vehicle","id",id);
         vehicleRepository.delete(vehicle.get());
+    }
+
+    public Shipment send(ShipmentDTO shipmentDTO){
+        if(shipmentDTO.getPackages()==null || shipmentDTO.getPackages().length==0)throw new APIException(HttpStatus.BAD_REQUEST,"shipment must have packages");
+        Optional<Branch> branchOptional=branchRepository.findById(shipmentDTO.getBranchId());
+        if(branchOptional.isEmpty()) throw new ResourceNotFoundException("Branch","ID",shipmentDTO.getBranchId());
+        Optional<Branch> branchRecOptional=branchRepository.findById(shipmentDTO.getReceiveBranchId());
+        if(branchRecOptional.isEmpty()) throw new ResourceNotFoundException("Branch","ID",shipmentDTO.getReceiveBranchId());
+        Double total = 0d;
+        for (PackageDTO pa: shipmentDTO.getPackages()) {
+            total+=pa.getSubTotal().doubleValue();
+        }
+        if(total!=shipmentDTO.getTotal().doubleValue())throw new APIException(HttpStatus.BAD_REQUEST,"Total and Subtotals are incorrect");
+        Shipment shipment = new Shipment(null,branchOptional.get(), shipmentDTO.getClientSendingName(), shipmentDTO.getClientReceiveName(), 
+                shipmentDTO.getIsPaid(), shipmentDTO.getTotal(), shipmentDTO.getSendDate(),shipmentDTO.getAddress(),branchRecOptional.get(),shipmentDTO.getPayDate(),null);
+        shipment=shipmentRepository.save(shipment);
+        Set<Package> packs = new HashSet<>();
+        for (PackageDTO pa: shipmentDTO.getPackages()) {
+            Package pack = new Package(null, pa.getWeightLbs(),pa.getDescription(), shipment,pa.getSubTotal());
+            packs.add(packageRepository.save(pack));
+        }
+        shipment.setPackages(packs);
+        return shipment;
     }
 }

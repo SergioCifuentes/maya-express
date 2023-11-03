@@ -1,6 +1,10 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -8,6 +12,10 @@ import java.util.Set;
 
 @Entity(name="Shipment")
 @Table(name="SHIPMENT")
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Shipment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -17,7 +25,6 @@ public class Shipment {
     @ManyToOne
     private Branch sendingBranch;
 
-    //tiempo espera
 
     @Column(name="client_sending_name", nullable = false)
     private String clientSendingName;
@@ -26,9 +33,9 @@ public class Shipment {
     private String clientReceiveName;
 
     @Column(name="is_paided", nullable = false)
-    private Boolean isPaided;
+    private Boolean isPaid;
 
-    @Column(name="total", nullable = false, scale = 5, precision = 2)
+    @Column(name="total", nullable = false, precision = 5, scale = 2)
     private BigDecimal total;
 
     @Column(name = "send_date")
@@ -45,5 +52,7 @@ public class Shipment {
 
     @OneToMany(mappedBy = "shipment")
     private Set<Package> packages;
+
+
 
 }

@@ -1,11 +1,15 @@
 package com.mayaexpress.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
 @Entity(name="Package")
 @Table(name="PACKAGE")
+@AllArgsConstructor
+@NoArgsConstructor
 public class Package {
 
     @Id
@@ -22,7 +26,7 @@ public class Package {
     @ManyToOne(optional = false)
     private Shipment shipment;
 
-    @Column(name="sub_total", scale = 5, precision = 2)
+    @Column(name="sub_total", scale = 2, precision = 5)
     private BigDecimal subTotal;
 
 

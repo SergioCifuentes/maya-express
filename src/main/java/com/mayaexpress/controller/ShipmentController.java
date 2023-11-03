@@ -1,6 +1,7 @@
 package com.mayaexpress.controller;
 
 import com.mayaexpress.dto.request.BranchDTO;
+import com.mayaexpress.dto.request.ShipmentDTO;
 import com.mayaexpress.dto.request.VehicleDTO;
 import com.mayaexpress.entity.*;
 import com.mayaexpress.exception.InternalServerException;
@@ -158,5 +159,17 @@ public class ShipmentController {
         return new ResponseEntity<>(id, HttpStatus.ACCEPTED);
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @PostMapping("/send")
+    public ResponseEntity<Shipment> sendShipment(@Valid @RequestBody ShipmentDTO shipmentDTO){
+        try {
+            Shipment newShipment =shipmentService.send(shipmentDTO);
+            Integer id = newShipment.getId().intValue();
+            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
+            return ResponseEntity.created(location).build();
+        } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }
