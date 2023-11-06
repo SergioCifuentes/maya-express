@@ -44,12 +44,11 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(responseDTO, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @ExceptionHandler({ AuthenticationException.class })
-    @ResponseBody
+    @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<?> handleAuthenticationException(Exception ex) {
         ResponseDTO responseDTO = new ResponseDTO();
         responseDTO.setSuccess(false);
-        responseDTO.setStatus_code(HttpStatus.UNAUTHORIZED.value());
+        responseDTO.setStatus_code(200);
         responseDTO.setMessage("Authentication failed at controller advice");
 
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(responseDTO);
