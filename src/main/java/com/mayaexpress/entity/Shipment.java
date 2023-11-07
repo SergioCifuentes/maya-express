@@ -32,11 +32,6 @@ public class Shipment {
     @Column(name="client_receiving_name", nullable = false)
     private String clientReceiveName;
 
-    @Column(name="is_paided", nullable = false)
-    private Boolean isPaid;
-
-    @Column(name="total", nullable = false, precision = 5, scale = 2)
-    private BigDecimal total;
 
     @Column(name = "send_date")
     private Date sendDate;
@@ -47,12 +42,13 @@ public class Shipment {
     @ManyToOne
     private Branch receiveBranch;
 
-    @Column(name="pay_date")
-    private Date payDate;
 
     @OneToMany(mappedBy = "shipment")
     private Set<Package> packages;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name="shipmentPayment", referencedColumnName="id", nullable=true)
+    private ShipmentPayment shipmentPayment;
 
 
 }

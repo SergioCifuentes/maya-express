@@ -23,28 +23,25 @@ import java.util.Set;
 public class ShipmentService {
     private final DestinationRepository destinationRepository;
 
-    private final PriceRepository priceRepository;
 
     private final BranchRepository branchRepository;
-
-    private final WarehouseRepository warehouseRepository;
-
-    private final VehicleRepository vehicleRepository;
 
     private final ShipmentRepository shipmentRepository;
 
     private final PackageRepository packageRepository;
 
-    public ShipmentService(DestinationRepository destinationRepository, PriceRepository priceRepository,
-                           BranchRepository branchRepository, WarehouseRepository warehouseRepository, VehicleRepository vehicleRepository,
+    private final EconomicService economicService;
+
+
+
+    public ShipmentService(DestinationRepository destinationRepository, EconomicService economicService,
+                           BranchRepository branchRepository,
                            ShipmentRepository shipmentRepository, PackageRepository packageRepository) {
         this.destinationRepository = destinationRepository;
-        this.priceRepository = priceRepository;
         this.branchRepository=branchRepository;
-        this.warehouseRepository=warehouseRepository;
-        this.vehicleRepository=vehicleRepository;
         this.shipmentRepository=shipmentRepository;
         this.packageRepository=packageRepository;
+        this.economicService=economicService;
     }
 
 
@@ -62,114 +59,20 @@ public class ShipmentService {
     }
 
     public List<Price> getPrices(){
-        return priceRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
+        return economicService.getPrices();
     }
 
     public Price getPrice(Integer id){
-        Optional<Price> price = priceRepository.findById(id);
-        if (price.isEmpty()) throw new ResourceNotFoundException("Price","id",id);
-        return price.get();
+        return economicService.getPrice(id);
     }
 
     public Price getPriceByDepartments(Integer idOrigin, Integer idDestination){
-        Optional<Price> price = priceRepository.findByOrigenAndDestination(idOrigin,idDestination);
-        if (price.isEmpty()) throw new ResourceNotFoundException("Price","idOrigin",idOrigin);
-        return price.get();
+        return economicService.getPriceByDepartments(idOrigin,idDestination);
     }
 
     public Price updatePrice(Price price, Integer id){
-        Optional<Price> opOldPrice = priceRepository.findById(id);
-        if (opOldPrice.isEmpty()) throw new ResourceNotFoundException("Price","id",id);
-        Price oldPrice = opOldPrice.get();
-        if(price.getCostPerLb()!=null)oldPrice.setCostPerLb(price.getCostPerLb());
-        if(price.getSendingCost()!=null)oldPrice.setSendingCost(price.getSendingCost());
-        return priceRepository.save(oldPrice);
+        return economicService.updatePrice(price,id);
 
-    }
-
-    public Branch createBranch(BranchDTO branchDTO){
-        if(branchDTO.getId()!=null){
-
-            Optional<Branch> branchOptional= branchRepository.findById(branchDTO.getId());
-            if(branchOptional.isPresent()) throw new APIException(HttpStatus.CONFLICT,"ID Already Exists");
-        }
-        Branch branch;
-        if(branchDTO.getWarehouse()!=null){
-            Optional<Warehouse> warehouseOptional=warehouseRepository.findById(branchDTO.getWarehouse());
-            if(warehouseOptional.isEmpty()){
-                throw new ResourceNotFoundException("Warehouse","ID",branchDTO.getWarehouse());
-            }
-            branch= new Branch(branchDTO.getId(),branchDTO.getAddress(),warehouseOptional.get(),branchDTO.getVehicleDay());
-        }else {
-            branch = new Branch(branchDTO.getId(), branchDTO.getAddress(), null, branchDTO.getVehicleDay());
-        }
-        return branchRepository.save(branch);
-    }
-
-    public Branch getBranch(Integer id){
-        Optional<Branch> branch = branchRepository.findById(id);
-        if (branch.isEmpty()) throw new ResourceNotFoundException("Branch","id",id);
-        return branch.get();
-    }
-    public List<Branch> getBranches(){
-        return branchRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
-
-    public Branch updateBranch(Branch branch, Integer id){
-        Optional<Branch> opOldBranch = branchRepository.findById(id);
-        if (opOldBranch.isEmpty()) throw new ResourceNotFoundException("Branch","id",id);
-        Branch oldBranch = opOldBranch.get();
-        if(branch.getAddress()!=null) oldBranch.setAddress(branch.getAddress());
-        if(branch.getVehicleDay()!=null) oldBranch.setVehicleDay(branch.getVehicleDay());
-        if(branch.getWarehouse()!=null) oldBranch.setWarehouse(branch.getWarehouse());
-        return branchRepository.save(oldBranch);
-    }
-
-    public void deleteBranch(Integer id){
-        Optional<Branch> branch = branchRepository.findById(id);
-        if (branch.isEmpty()) throw new ResourceNotFoundException("Branch","id",id);
-        branchRepository.delete(branch.get());
-    }
-
-    public Vehicle createVehicle(VehicleDTO vehicleDTO){
-        if(vehicleDTO.getId()!=null){
-            Optional<Vehicle> vehicleOptional= vehicleRepository.findById(vehicleDTO.getId());
-            if(vehicleOptional.isPresent()) throw new APIException(HttpStatus.CONFLICT,"ID Already Exists");
-        }
-        Vehicle vehicle;
-        if(vehicleDTO.getBranchId()!=null){
-            Optional<Branch> branchOptional=branchRepository.findById(vehicleDTO.getBranchId());
-            if(branchOptional.isEmpty()) throw new ResourceNotFoundException("Branch","ID",vehicleDTO.getBranchId());
-            vehicle= new Vehicle(vehicleDTO.getId(),vehicleDTO.getPlate(),vehicleDTO.getVehiculeType(),branchOptional.get(),vehicleDTO.getMaxWeight());
-        }else {
-            vehicle= new Vehicle(vehicleDTO.getId(),vehicleDTO.getPlate(),vehicleDTO.getVehiculeType(),null,vehicleDTO.getMaxWeight());
-        }
-        return vehicleRepository.save(vehicle);
-    }
-
-    public Vehicle getVehicle(Integer id){
-        Optional<Vehicle> vehicle = vehicleRepository.findById(id);
-        if (vehicle.isEmpty()) throw new ResourceNotFoundException("Vehicle","id",id);
-        return vehicle.get();
-    }
-    public List<Vehicle> getVehicles(){
-        return vehicleRepository.findAll(Sort.by(Sort.Direction.ASC, "id"));
-    }
-
-    public Vehicle updateVehicle(Vehicle vehicle, Integer id){
-        Optional<Vehicle> opOldVehicle = vehicleRepository.findById(id);
-        if (opOldVehicle.isEmpty()) throw new ResourceNotFoundException("Vehicle","id",id);
-        Vehicle oldVehicle = opOldVehicle.get();
-        if(vehicle.getPlate()!=null) oldVehicle.setPlate(vehicle.getPlate());
-        if(vehicle.getVehicleType()!=null) oldVehicle.setVehicleType(vehicle.getVehicleType());
-        if(vehicle.getMaxWeight()!=null) oldVehicle.setMaxWeight(vehicle.getMaxWeight());
-        return vehicleRepository.save(oldVehicle);
-    }
-
-    public void deleteVehicle(Integer id){
-        Optional<Vehicle> vehicle = vehicleRepository.findById(id);
-        if (vehicle.isEmpty()) throw new ResourceNotFoundException("Vehicle","id",id);
-        vehicleRepository.delete(vehicle.get());
     }
 
     public Shipment send(ShipmentDTO shipmentDTO){
@@ -178,20 +81,23 @@ public class ShipmentService {
         if(branchOptional.isEmpty()) throw new ResourceNotFoundException("Branch","ID",shipmentDTO.getBranchId());
         Optional<Branch> branchRecOptional=branchRepository.findById(shipmentDTO.getReceiveBranchId());
         if(branchRecOptional.isEmpty()) throw new ResourceNotFoundException("Branch","ID",shipmentDTO.getReceiveBranchId());
-        Double total = 0d;
-        for (PackageDTO pa: shipmentDTO.getPackages()) {
-            total+=pa.getSubTotal().doubleValue();
-        }
-        if(total!=shipmentDTO.getTotal().doubleValue())throw new APIException(HttpStatus.BAD_REQUEST,"Total and Subtotals are incorrect");
         Shipment shipment = new Shipment(null,branchOptional.get(), shipmentDTO.getClientSendingName(), shipmentDTO.getClientReceiveName(), 
-                shipmentDTO.getIsPaid(), shipmentDTO.getTotal(), shipmentDTO.getSendDate(),shipmentDTO.getAddress(),branchRecOptional.get(),shipmentDTO.getPayDate(),null);
+                shipmentDTO.getSendDate(),shipmentDTO.getAddress(),branchRecOptional.get(),null,null);
         shipment=shipmentRepository.save(shipment);
         Set<Package> packs = new HashSet<>();
         for (PackageDTO pa: shipmentDTO.getPackages()) {
             Package pack = new Package(null, pa.getWeightLbs(),pa.getDescription(), shipment,pa.getSubTotal());
             packs.add(packageRepository.save(pack));
         }
+        shipment.setShipmentPayment(economicService.createShipmentPayment(shipment,shipmentDTO.getIsPaid(),shipmentDTO.getTotal(),
+                (shipmentDTO.getIsPaid())?shipmentDTO.getPayDate():null));
+
         shipment.setPackages(packs);
         return shipment;
+    }
+
+    public ShipmentPayment payShipment(Integer id){
+        return economicService.payShipment(id);
+
     }
 }

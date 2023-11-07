@@ -75,89 +75,7 @@ public class ShipmentController {
 
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/branch")
-    public ResponseEntity<Branch> createBranch(@Valid @RequestBody BranchDTO branch){
-        try {
-            Branch newBranch =shipmentService.createBranch(branch);
-            Integer id = newBranch.getId().intValue();
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
-            return ResponseEntity.created(location).build();
-        } catch (InternalServerException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
-    @GetMapping("/branch/{id}")
-    public ResponseEntity<Branch> getBranch( @Valid @PathVariable Integer id){
-        return ResponseEntity.ok(shipmentService.getBranch(id));
-
-    }
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
-    @GetMapping("/branch")
-    public ResponseEntity<List<Branch>> getBranches(){
-        try{
-            return ResponseEntity.ok(shipmentService.getBranches());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/branch/{id}")
-    public ResponseEntity<Branch> updateBranch(@Valid @RequestBody Branch branch, @Valid @PathVariable Integer id){
-        return ResponseEntity.ok(shipmentService.updateBranch(branch,id));
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/branch/{id}")
-    public ResponseEntity<?> deleteBranch( @Valid @PathVariable Integer id){
-        shipmentService.deleteBranch(id);
-        return new ResponseEntity<>(id, HttpStatus.ACCEPTED);
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/vehicle")
-    public ResponseEntity<Vehicle> createVehicle(@Valid @RequestBody VehicleDTO vehicleDTO){
-        try {
-            Vehicle newVehicle =shipmentService.createVehicle(vehicleDTO);
-            Integer id = newVehicle.getId().intValue();
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
-            return ResponseEntity.created(location).build();
-        } catch (InternalServerException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
-    @GetMapping("/vehicle/{id}")
-    public ResponseEntity<Vehicle> getVehicle( @Valid @PathVariable Integer id){
-        return ResponseEntity.ok(shipmentService.getVehicle(id));
-
-    }
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
-    @GetMapping("/vehicle")
-    public ResponseEntity<List<Vehicle>> getVehicles(){
-        try{
-            return ResponseEntity.ok(shipmentService.getVehicles());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/vehicle/{id}")
-    public ResponseEntity<Vehicle> updateVehicle(@Valid @RequestBody Vehicle vehicle, @Valid @PathVariable Integer id){
-        return ResponseEntity.ok(shipmentService.updateVehicle(vehicle,id));
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/vehicle/{id}")
-    public ResponseEntity<?> deleteVehicle( @Valid @PathVariable Integer id){
-        shipmentService.deleteVehicle(id);
-        return new ResponseEntity<>(id, HttpStatus.ACCEPTED);
-    }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @PostMapping("/send")
@@ -167,6 +85,16 @@ public class ShipmentController {
             Integer id = newShipment.getId().intValue();
             URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
             return ResponseEntity.created(location).build();
+        } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @PutMapping("/pay-shipment/{id}")
+    public ResponseEntity<ShipmentPayment> payShipment(@Valid @PathVariable Integer id){
+        try {
+            ShipmentPayment newPayment =shipmentService.payShipment(id);
+            return ResponseEntity.ok(newPayment);
         } catch (InternalServerException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
