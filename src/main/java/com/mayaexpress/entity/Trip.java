@@ -6,31 +6,27 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="Vehicle")
-@Table(name = "VEHICLE")
+import java.util.Date;
+
+@Entity(name="Trip")
+@Table(name = "TRIP")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Vehicle {
-
+public class Trip {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="plate", unique = true, nullable = false)
-    private String plate;
-
-    @Column(name="vehicle_type")
-    private VehicleType vehicleType;
+    @Column(name="current_weight", nullable = false)
+    private Float currentWeight;
 
     @ManyToOne
-    private Branch branch;
+    private Route route;
 
-    @Column(name = "max_weight")
-    private Integer maxWeight;
-
-
+    @Column(name="date", nullable = false)
+    private Date date;
 
 }

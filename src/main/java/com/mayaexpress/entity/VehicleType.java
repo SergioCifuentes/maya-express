@@ -1,5 +1,5 @@
 package com.mayaexpress.entity;
 
-public enum VehiculeType {
+public enum VehicleType {
     PICKUP, TRUCK
 }

@@ -6,31 +6,24 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity(name="Vehicle")
-@Table(name = "VEHICLE")
+@Entity(name="ShipmentTrip")
+@Table(name = "SHIPMENT_TRIP")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Vehicle {
-
+public class ShipmentTrip {
     @Id
     @Column(name="id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="plate", unique = true, nullable = false)
-    private String plate;
+    @ManyToOne
+    private Shipment shipment;
 
-    @Column(name="vehicle_type")
-    private VehicleType vehicleType;
+    @Column(name = "number", nullable = false)
+    private Integer number;
 
     @ManyToOne
-    private Branch branch;
-
-    @Column(name = "max_weight")
-    private Integer maxWeight;
-
-
-
+    private Trip trip;
 }

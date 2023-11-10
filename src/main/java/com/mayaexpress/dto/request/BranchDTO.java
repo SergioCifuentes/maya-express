@@ -15,6 +15,4 @@ public class BranchDTO {
 
     private Integer warehouse;
 
-    @NotBlank(message = "vehicleDay es obligatorio")
-    private DayOfTheWeek vehicleDay;
 }

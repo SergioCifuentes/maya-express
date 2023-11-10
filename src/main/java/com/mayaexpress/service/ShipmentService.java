@@ -82,7 +82,7 @@ public class ShipmentService {
         Optional<Branch> branchRecOptional=branchRepository.findById(shipmentDTO.getReceiveBranchId());
         if(branchRecOptional.isEmpty()) throw new ResourceNotFoundException("Branch","ID",shipmentDTO.getReceiveBranchId());
         Shipment shipment = new Shipment(null,branchOptional.get(), shipmentDTO.getClientSendingName(), shipmentDTO.getClientReceiveName(), 
-                shipmentDTO.getSendDate(),shipmentDTO.getAddress(),branchRecOptional.get(),null,null);
+                shipmentDTO.getSendDate(),shipmentDTO.getAddress(),branchRecOptional.get(),null,null,null);
         shipment=shipmentRepository.save(shipment);
         Set<Package> packs = new HashSet<>();
         for (PackageDTO pa: shipmentDTO.getPackages()) {

@@ -1,7 +1,6 @@
 package com.mayaexpress.dto.request;
 
-import com.mayaexpress.entity.DayOfTheWeek;
-import com.mayaexpress.entity.VehiculeType;
+import com.mayaexpress.entity.VehicleType;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -14,7 +13,7 @@ public class VehicleDTO {
     private String plate;
 
     @NotBlank(message = "vehiculeType es obligatorio")
-    private VehiculeType vehiculeType;
+    private VehicleType vehicleType;
 
     private Integer branchId;
 
