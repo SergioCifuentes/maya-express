@@ -21,4 +21,7 @@ public class ShipmentHistory {
     @ManyToOne
     @JoinColumn(name="warehouse")
     private Warehouse warehouse;
+
+    @ManyToOne
+    private Trip trip;
 }

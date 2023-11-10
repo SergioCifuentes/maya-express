@@ -33,10 +33,10 @@ public class Shipment {
     private String clientReceiveName;
 
 
-    @Column(name = "send_date")
+    @Column(name = "send_date",nullable = false)
     private Date sendDate;
 
-    @Column(name = "address")
+    @Column(name = "address",nullable = false)
     private String address;
 
     @ManyToOne
@@ -49,6 +49,9 @@ public class Shipment {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name="shipmentPayment", referencedColumnName="id", nullable=true)
     private ShipmentPayment shipmentPayment;
+
+    @Column(name = "expected_date")
+    private Date expectedDate;
 
 
 }

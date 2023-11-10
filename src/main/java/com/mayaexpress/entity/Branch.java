@@ -25,14 +25,11 @@ public class Branch {
     @JoinColumn(name="warehouse_id", referencedColumnName="id", nullable=true)
     private Warehouse warehouse;
 
-    @Column(name="vehicule_day")
-    private DayOfTheWeek vehicleDay;
 
-    public Branch(Integer id, String address, Warehouse warehouse, DayOfTheWeek vehicleDay) {
+    public Branch(Integer id, String address, Warehouse warehouse) {
         this.id = id;
         this.address = address;
         this.warehouse = warehouse;
-        this.vehicleDay = vehicleDay;
     }
 
     public Branch() {

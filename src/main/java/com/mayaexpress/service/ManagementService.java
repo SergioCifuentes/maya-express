@@ -43,9 +43,9 @@ public class ManagementService {
             if(warehouseOptional.isEmpty()){
                 throw new ResourceNotFoundException("Warehouse","ID",branchDTO.getWarehouse());
             }
-            branch= new Branch(branchDTO.getId(),branchDTO.getAddress(),warehouseOptional.get(),branchDTO.getVehicleDay());
+            branch= new Branch(branchDTO.getId(),branchDTO.getAddress(),warehouseOptional.get());
         }else {
-            branch = new Branch(branchDTO.getId(), branchDTO.getAddress(), null, branchDTO.getVehicleDay());
+            branch = new Branch(branchDTO.getId(), branchDTO.getAddress(), null);
         }
         return branchRepository.save(branch);
     }
@@ -64,7 +64,6 @@ public class ManagementService {
         if (opOldBranch.isEmpty()) throw new ResourceNotFoundException("Branch","id",id);
         Branch oldBranch = opOldBranch.get();
         if(branch.getAddress()!=null) oldBranch.setAddress(branch.getAddress());
-        if(branch.getVehicleDay()!=null) oldBranch.setVehicleDay(branch.getVehicleDay());
         if(branch.getWarehouse()!=null) oldBranch.setWarehouse(branch.getWarehouse());
         return branchRepository.save(oldBranch);
     }
@@ -84,9 +83,9 @@ public class ManagementService {
         if(vehicleDTO.getBranchId()!=null){
             Optional<Branch> branchOptional=branchRepository.findById(vehicleDTO.getBranchId());
             if(branchOptional.isEmpty()) throw new ResourceNotFoundException("Branch","ID",vehicleDTO.getBranchId());
-            vehicle= new Vehicle(vehicleDTO.getId(),vehicleDTO.getPlate(),vehicleDTO.getVehiculeType(),branchOptional.get(),vehicleDTO.getMaxWeight());
+            vehicle= new Vehicle(vehicleDTO.getId(),vehicleDTO.getPlate(),vehicleDTO.getVehicleType(),branchOptional.get(),vehicleDTO.getMaxWeight());
         }else {
-            vehicle= new Vehicle(vehicleDTO.getId(),vehicleDTO.getPlate(),vehicleDTO.getVehiculeType(),null,vehicleDTO.getMaxWeight());
+            vehicle= new Vehicle(vehicleDTO.getId(),vehicleDTO.getPlate(),vehicleDTO.getVehicleType(),null,vehicleDTO.getMaxWeight());
         }
         return vehicleRepository.save(vehicle);
     }
