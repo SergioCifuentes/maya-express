@@ -101,7 +101,7 @@ public class ShipmentController {
         }
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @GetMapping("/qr/{id}")
     public ResponseEntity<String> getQR(@Valid @PathVariable Integer id){
         try {
