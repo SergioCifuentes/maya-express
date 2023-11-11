@@ -1,5 +1,6 @@
 package com.mayaexpress.controller;
 
+import com.google.zxing.WriterException;
 import com.mayaexpress.dto.request.BranchDTO;
 import com.mayaexpress.dto.request.ShipmentDTO;
 import com.mayaexpress.dto.request.VehicleDTO;
@@ -13,6 +14,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
@@ -95,6 +97,16 @@ public class ShipmentController {
             ShipmentPayment newPayment =shipmentService.payShipment(id);
             return ResponseEntity.ok(newPayment);
         } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @GetMapping("/qr/{id}")
+    public ResponseEntity<String> getQR(@Valid @PathVariable Integer id){
+        try {
+            return ResponseEntity.ok(shipmentService.getQR(id));
+        } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
