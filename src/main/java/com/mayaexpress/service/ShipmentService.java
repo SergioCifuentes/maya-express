@@ -1,14 +1,35 @@
 package com.mayaexpress.service;
 
 import com.mayaexpress.dto.request.*;
+
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
+import com.google.zxing.WriterException;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import com.mayaexpress.dto.request.BranchDTO;
+import com.mayaexpress.dto.request.PackageDTO;
+import com.mayaexpress.dto.request.ShipmentDTO;
+import com.mayaexpress.dto.request.VehicleDTO;
+
 import com.mayaexpress.entity.*;
 import com.mayaexpress.entity.Package;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.exception.ResourceNotFoundException;
 import com.mayaexpress.repository.*;
+import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.math.BigDecimal;
 
 import java.util.*;
 
@@ -23,6 +44,7 @@ public class ShipmentService {
 
     private final EconomicService economicService;
 
+
     private final WarehouseRepository warehouseRepository;
 
     private final ShipmentHistoryRepository shipmentHistoryRepository;
@@ -31,6 +53,15 @@ public class ShipmentService {
 
     private final TripRepository tripRepository;
 
+    @Value("${url-maya-express-qr}")
+    private String urlLocalize;
+
+
+    @Value("${qr.height}")
+    private int height;
+
+    @Value("${qr.width}")
+    private int width;
 
     public ShipmentService(DestinationRepository destinationRepository, EconomicService economicService,
                             WarehouseRepository warehouseRepository,
@@ -102,6 +133,7 @@ public class ShipmentService {
 
     }
 
+
     public ShipmentHistory registerEntrance(WarehouseEntranceDTO warehouseEntranceDTO){
         ShipmentHistory shipmentHistory;
         Shipment shipment= getShipment(warehouseEntranceDTO.getShipmentId());
@@ -147,5 +179,27 @@ public class ShipmentService {
             throw new ResourceNotFoundException("Warehouse","ID",id);
         }
         return optionalWarehouse.get();
+
+    public String getQR(Integer id) throws IOException, WriterException {
+        String data = urlLocalize + id.toString();
+        Map<EncodeHintType, Object> hintMap = new HashMap<>();
+        hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
+        hintMap.put(EncodeHintType.CHARACTER_SET, "UTF-8");
+
+        QRCodeWriter qrCodeWriter = new QRCodeWriter();
+        BitMatrix bitMatrix = qrCodeWriter.encode(data, BarcodeFormat.QR_CODE, width, height, hintMap);
+
+        BufferedImage qrImage = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
+                qrImage.setRGB(x, y, bitMatrix.get(x, y) ? 0xFF000000 : 0xFFFFFFFF);
+            }
+        }
+
+        ByteArrayOutputStream qr = new ByteArrayOutputStream();
+        ImageIO.write(qrImage, "png", qr);
+
+        return Base64.encodeBase64String(qr.toByteArray());
+
     }
 }

@@ -1,6 +1,8 @@
 package com.mayaexpress.controller;
 
+
 import com.mayaexpress.dto.request.*;
+
 import com.mayaexpress.entity.*;
 import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.ShipmentService;
@@ -11,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
@@ -97,6 +100,7 @@ public class ShipmentController {
         }
     }
 
+
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT') or hasAnyAuthority('EMPLOYEE')")
     @PutMapping("/entrance/")
     public ResponseEntity<ShipmentHistory> registerEntrance(@Valid @RequestBody WarehouseEntranceDTO warehouseEntranceDTO){
@@ -104,9 +108,18 @@ public class ShipmentController {
             ShipmentHistory newHistory =shipmentService.registerEntrance(warehouseEntranceDTO);
             return ResponseEntity.ok(newHistory);
         } catch (InternalServerException ex) {
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @GetMapping("/send/{id}")
+    public ResponseEntity<String> getQR(@Valid @PathVariable Integer id){
+        try {
+            return ResponseEntity.ok(shipmentService.getQR(id));
+        } catch (Exception e) {
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT') or hasAnyAuthority('EMPLOYEE')")
     @PutMapping("/receive/")
@@ -118,6 +131,5 @@ public class ShipmentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
 
 }
