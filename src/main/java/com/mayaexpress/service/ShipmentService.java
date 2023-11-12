@@ -8,10 +8,8 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
-import com.mayaexpress.dto.request.BranchDTO;
 import com.mayaexpress.dto.request.PackageDTO;
 import com.mayaexpress.dto.request.ShipmentDTO;
-import com.mayaexpress.dto.request.VehicleDTO;
 
 import com.mayaexpress.entity.*;
 import com.mayaexpress.entity.Package;
@@ -173,12 +171,13 @@ public class ShipmentService {
         return optionalShipment.get();
     }
 
-    public Warehouse getWarehouse(Integer id){
-        Optional<Warehouse> optionalWarehouse= warehouseRepository.findById(id);
-        if(optionalWarehouse.isEmpty()){
-            throw new ResourceNotFoundException("Warehouse","ID",id);
+    public Warehouse getWarehouse(Integer id) {
+        Optional<Warehouse> optionalWarehouse = warehouseRepository.findById(id);
+        if (optionalWarehouse.isEmpty()) {
+            throw new ResourceNotFoundException("Warehouse", "ID", id);
         }
         return optionalWarehouse.get();
+    }
 
     public String getQR(Integer id) throws IOException, WriterException {
         String data = urlLocalize + id.toString();

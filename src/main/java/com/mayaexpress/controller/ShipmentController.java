@@ -103,11 +103,14 @@ public class ShipmentController {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT') or hasAnyAuthority('EMPLOYEE')")
     @PutMapping("/entrance/")
-    public ResponseEntity<ShipmentHistory> registerEntrance(@Valid @RequestBody WarehouseEntranceDTO warehouseEntranceDTO){
+    public ResponseEntity<ShipmentHistory> registerEntrance(@Valid @RequestBody WarehouseEntranceDTO warehouseEntranceDTO) {
         try {
-            ShipmentHistory newHistory =shipmentService.registerEntrance(warehouseEntranceDTO);
+            ShipmentHistory newHistory = shipmentService.registerEntrance(warehouseEntranceDTO);
             return ResponseEntity.ok(newHistory);
         } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @GetMapping("/send/{id}")
