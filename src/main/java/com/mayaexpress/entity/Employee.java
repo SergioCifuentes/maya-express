@@ -4,11 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.math.BigDecimal;
-import java.util.Collection;
 
 @Entity
 @Getter
@@ -32,7 +29,7 @@ public class Employee {
 
     @ColumnDefault("true")
     @Column(name = "is_enable", nullable = false)
-    private boolean isEnable;
+    private Boolean isEnable;
 
     @Column(name="role")
     private Role role;
@@ -41,7 +38,7 @@ public class Employee {
     private Position position;
 
     @ManyToOne
-    private Branch branch;
+    private Warehouse warehouse;
 
     @Column(name = "username", nullable = false)
     private String username;

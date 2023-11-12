@@ -1,25 +1,23 @@
 package com.mayaexpress.service;
 
-import com.mayaexpress.entity.Branch;
-import com.mayaexpress.entity.Employee;
+import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.entity.Vehicle;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.repository.VehicleRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
 public class VehicleService {
 
     private final VehicleRepository vehicleRepository;
-    private final BranchService branchService;
+    private final WarehouseService warehouseService;
 
-    public VehicleService(VehicleRepository vehicleRepository, BranchService branchService) {
+    public VehicleService(VehicleRepository vehicleRepository, WarehouseService warehouseService) {
         this.vehicleRepository = vehicleRepository;
-        this.branchService = branchService;
+        this.warehouseService = warehouseService;
     }
 
     public Vehicle get(Integer id) {
@@ -31,9 +29,9 @@ public class VehicleService {
     }
 
     public Vehicle assignVehicle(Integer idVehicle, Integer idBranch) {
-        Branch branch = branchService.get(idBranch);
+        Warehouse warehouse = warehouseService.get(idBranch);
         Vehicle vehicle = get(idVehicle);
-        vehicle.setBranch(branch);
+        vehicle.setWarehouse(warehouse);
         return vehicleRepository.save(vehicle);
     }
 }

@@ -26,7 +26,7 @@ public class Vehicle {
     private VehicleType vehicleType;
 
     @ManyToOne
-    private Branch branch;
+    private Warehouse warehouse;
 
     @Column(name = "max_weight")
     private Integer maxWeight;

@@ -15,7 +15,7 @@ public class VehicleDTO {
     @NotBlank(message = "vehiculeType es obligatorio")
     private VehicleType vehicleType;
 
-    private Integer branchId;
+    private Integer warehouseId;
 
     @NotBlank(message = "maxWeight es obligatorio")
     private Integer maxWeight;

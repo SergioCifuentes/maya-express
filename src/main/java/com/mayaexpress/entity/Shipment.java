@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
 
@@ -23,7 +22,7 @@ public class Shipment {
     private Integer id;
 
     @ManyToOne
-    private Branch sendingBranch;
+    private Warehouse sendingWarehouse;
 
 
     @Column(name="client_sending_name", nullable = false)
@@ -40,7 +39,7 @@ public class Shipment {
     private String address;
 
     @ManyToOne
-    private Branch receiveBranch;
+    private Warehouse receiveWarehouse;
 
 
     @OneToMany(mappedBy = "shipment")

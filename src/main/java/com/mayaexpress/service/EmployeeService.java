@@ -2,7 +2,6 @@ package com.mayaexpress.service;
 
 import com.mayaexpress.entity.*;
 import com.mayaexpress.exception.APIException;
-import com.mayaexpress.exception.EmployeeNotFoundException;
 import com.mayaexpress.exception.ResourceNotFoundException;
 import com.mayaexpress.repository.EmployeeRepository;
 import com.mayaexpress.repository.PositionRepository;
@@ -25,7 +24,7 @@ import java.util.Optional;
 public class EmployeeService {
 
     private final EmployeeRepository employeeRepository;
-    private final BranchService branchService;
+    private final WarehouseService warehouseService;
     private final MergeEntity<Employee> merge;
 
     private final PasswordEncoder encoder;
@@ -35,11 +34,11 @@ public class EmployeeService {
     private final WageRepository wageRepository;
 
     public EmployeeService(EmployeeRepository employeeRepository, PasswordEncoder encoder,
-                           BranchService branchService, PositionRepository positionRepository, WageRepository wageRepository) {
+                           WarehouseService warehouseService, PositionRepository positionRepository, WageRepository wageRepository) {
         this.employeeRepository = employeeRepository;
         this.encoder = encoder;
         this.merge = new MergeEntity<>();
-        this.branchService = branchService;
+        this.warehouseService = warehouseService;
         this.positionRepository=positionRepository;
         this.wageRepository=wageRepository;
 
@@ -81,7 +80,7 @@ public class EmployeeService {
         if (employee.isEmpty()) {
             throw new APIException(HttpStatus.NOT_FOUND, "Employee not found.");
         }
-        employee.get().setEnable(false);
+        employee.get().setIsEnable(false);
         employeeRepository.save(employee.get());
     }
 
@@ -94,9 +93,9 @@ public class EmployeeService {
     }
 
     public Employee assignEmployee(BigDecimal idEmployee, Integer idBranch) {
-        Branch branch = branchService.get(idBranch);
+        Warehouse warehouse = warehouseService.get(idBranch);
         Employee employee = get(idEmployee);
-        employee.setBranch(branch);
+        employee.setWarehouse(warehouse);
         return employeeRepository.save(employee);
     }
 

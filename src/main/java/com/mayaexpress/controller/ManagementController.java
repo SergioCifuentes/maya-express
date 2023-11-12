@@ -1,8 +1,6 @@
 package com.mayaexpress.controller;
 
-import com.mayaexpress.dto.request.BranchDTO;
 import com.mayaexpress.dto.request.VehicleDTO;
-import com.mayaexpress.entity.Branch;
 import com.mayaexpress.entity.Vehicle;
 import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.ManagementService;
@@ -26,47 +24,6 @@ public class ManagementController {
         this.managementService = managementService;
     }
 
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/branch")
-    public ResponseEntity<Branch> createBranch(@Valid @RequestBody BranchDTO branch){
-        try {
-            Branch newBranch = managementService.createBranch(branch);
-            Integer id = newBranch.getId().intValue();
-            URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(id).toUri();
-            return ResponseEntity.created(location).build();
-        } catch (InternalServerException ex) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
-    @GetMapping("/branch/{id}")
-    public ResponseEntity<Branch> getBranch( @Valid @PathVariable Integer id){
-        return ResponseEntity.ok(managementService.getBranch(id));
-
-    }
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
-    @GetMapping("/branch")
-    public ResponseEntity<List<Branch>> getBranches(){
-        try{
-            return ResponseEntity.ok(managementService.getBranches());
-        }catch (Exception e){
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-        }
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PutMapping("/branch/{id}")
-    public ResponseEntity<Branch> updateBranch(@Valid @RequestBody Branch branch, @Valid @PathVariable Integer id){
-        return ResponseEntity.ok(managementService.updateBranch(branch,id));
-    }
-
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @DeleteMapping("/branch/{id}")
-    public ResponseEntity<?> deleteBranch( @Valid @PathVariable Integer id){
-        managementService.deleteBranch(id);
-        return new ResponseEntity<>(id, HttpStatus.ACCEPTED);
-    }
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/vehicle")
