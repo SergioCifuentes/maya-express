@@ -1,9 +1,8 @@
 package com.mayaexpress.controller;
 
-import com.google.zxing.WriterException;
-import com.mayaexpress.dto.request.BranchDTO;
-import com.mayaexpress.dto.request.ShipmentDTO;
-import com.mayaexpress.dto.request.VehicleDTO;
+
+import com.mayaexpress.dto.request.*;
+
 import com.mayaexpress.entity.*;
 import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.ShipmentService;
@@ -101,12 +100,34 @@ public class ShipmentController {
         }
     }
 
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT') or hasAnyAuthority('EMPLOYEE')")
+    @PutMapping("/entrance/")
+    public ResponseEntity<ShipmentHistory> registerEntrance(@Valid @RequestBody WarehouseEntranceDTO warehouseEntranceDTO){
+        try {
+            ShipmentHistory newHistory =shipmentService.registerEntrance(warehouseEntranceDTO);
+            return ResponseEntity.ok(newHistory);
+        } catch (InternalServerException ex) {
+
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @GetMapping("/send/{id}")
     public ResponseEntity<String> getQR(@Valid @PathVariable Integer id){
         try {
             return ResponseEntity.ok(shipmentService.getQR(id));
         } catch (Exception e) {
+
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT') or hasAnyAuthority('EMPLOYEE')")
+    @PutMapping("/receive/")
+    public ResponseEntity<ShipmentHistory> receive(@Valid @RequestBody ReceiveDTO receiveDTO){
+        try {
+            ShipmentHistory newHistory =shipmentService.receive(receiveDTO);
+            return ResponseEntity.ok(newHistory);
+        } catch (InternalServerException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }

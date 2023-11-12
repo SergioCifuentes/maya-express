@@ -19,7 +19,7 @@ public class Cost {
 
     @ManyToOne
     @JoinColumn(name = "branch")
-    private Branch branch;
+    private Warehouse warehouse;
 
     @Column(name = "date")
     private Date date;

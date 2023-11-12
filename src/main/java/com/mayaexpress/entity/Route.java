@@ -24,7 +24,7 @@ public class Route {
     private Vehicle vehicle;
 
     @ManyToOne
-    private Branch destination;
+    private Warehouse destination;
 
     @Column(name="departure_day",nullable = false)
     private DayOfTheWeek departureDay;

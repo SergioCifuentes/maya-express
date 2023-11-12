@@ -1,6 +1,5 @@
 package com.mayaexpress.controller;
 
-import com.mayaexpress.entity.Employee;
 import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.WarehouseService;
@@ -13,7 +12,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.math.BigDecimal;
 import java.net.URI;
 
 @RestController()
@@ -90,7 +88,7 @@ public class WarehouseController {
     }
 
     @PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/{id}/")
+    @GetMapping("/{id}")
     public ResponseEntity<Warehouse> get(@Valid @PathVariable Integer id){
         try {
             return ResponseEntity.ok(warehouseService.get(id));

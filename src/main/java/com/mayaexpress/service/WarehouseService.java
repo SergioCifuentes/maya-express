@@ -1,6 +1,5 @@
 package com.mayaexpress.service;
 
-import com.mayaexpress.entity.Employee;
 import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.repository.WarehouseRepository;
@@ -11,7 +10,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.Optional;
 
 @Service
@@ -58,7 +56,7 @@ public class WarehouseService {
         if (warehouse.isEmpty()) {
             throw new APIException(HttpStatus.NOT_FOUND, "Warehouse not found.");
         }
-        warehouse.get().setEnable(false);
+        warehouse.get().setIsEnable(false);
         warehouseRepository.save(warehouse.get());
     }
 

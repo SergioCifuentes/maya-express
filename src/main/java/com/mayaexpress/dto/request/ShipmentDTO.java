@@ -1,6 +1,5 @@
 package com.mayaexpress.dto.request;
 
-import com.mayaexpress.entity.Branch;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
