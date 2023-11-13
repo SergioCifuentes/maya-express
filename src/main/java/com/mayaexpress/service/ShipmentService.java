@@ -131,23 +131,25 @@ public class ShipmentService {
     }
 
 
-    public ShipmentHistory registerEntrance(WarehouseEntranceDTO warehouseEntranceDTO){
+    public List<ShipmentHistory> registerEntrance(WarehouseEntranceDTO warehouseEntranceDTO){
         ShipmentHistory shipmentHistory;
-        Shipment shipment= getShipment(warehouseEntranceDTO.getShipmentId());
+
         Warehouse warehouse= getWarehouse(warehouseEntranceDTO.getWarehouseId());
-        Optional<Trip> optionalTrip= tripRepository.findById(warehouseEntranceDTO.getTripId());
-        if(optionalTrip.isEmpty()){
-            throw new ResourceNotFoundException("Trip","ID",warehouseEntranceDTO.getTripId());
+        Trip trip= getTrip(warehouseEntranceDTO.getTripId());
+        List<ShipmentHistory> histories = new ArrayList<>();
+        for (Integer shipmentId:warehouseEntranceDTO.getShipmentId()) {
+            Shipment shipment= getShipment(shipmentId);
+            if(warehouse.getId()==shipment.getReceiveWarehouse().getId()){
+                shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.READY,new Date(),warehouse,null);
+            }else{
+                Trip nextTrip = getNextTrip(shipment,trip);
+                shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.ENTRANCE,new Date(),warehouse,nextTrip);
+            }
+            histories.add(shipmentHistory);
         }
 
-        if(true){
-            shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.READY,new Date(),warehouse,null);
-        }else{
-            Trip nextTrip = getNextTrip(shipment,optionalTrip.get());
-            shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.READY,new Date(),warehouse,nextTrip);
-        }
-        shipmentHistory=shipmentHistoryRepository.save(shipmentHistory);
-        return shipmentHistory;
+        histories=shipmentHistoryRepository.saveAll(histories);
+        return histories;
     }
 
     public Trip getNextTrip(Shipment shipment, Trip trip){
@@ -176,6 +178,13 @@ public class ShipmentService {
             throw new ResourceNotFoundException("Warehouse", "ID", id);
         }
         return optionalWarehouse.get();
+    }
+    public Trip getTrip(Integer id) {
+        Optional<Trip> optionalTrip = tripRepository.findById(id);
+        if (optionalTrip.isEmpty()) {
+            throw new ResourceNotFoundException("Trip", "ID", id);
+        }
+        return optionalTrip.get();
     }
 
     public String getQR(Integer id) throws IOException, WriterException {

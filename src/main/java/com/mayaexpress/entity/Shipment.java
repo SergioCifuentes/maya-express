@@ -38,7 +38,7 @@ public class Shipment {
     @Column(name = "address",nullable = false)
     private String address;
 
-    @ManyToOne
+    @ManyToOne()
     private Warehouse receiveWarehouse;
 
 
@@ -52,5 +52,19 @@ public class Shipment {
     @Column(name = "expected_date")
     private Date expectedDate;
 
-
+    @Override
+    public String toString() {
+        return "Shipment{" +
+                "id=" + id +
+                ", sendingWarehouse=" + sendingWarehouse +
+                ", clientSendingName='" + clientSendingName + '\'' +
+                ", clientReceiveName='" + clientReceiveName + '\'' +
+                ", sendDate=" + sendDate +
+                ", address='" + address + '\'' +
+                ", receiveWarehouse=" + receiveWarehouse +
+                ", packages=" + packages +
+                ", shipmentPayment=" + shipmentPayment +
+                ", expectedDate=" + expectedDate +
+                '}';
+    }
 }
