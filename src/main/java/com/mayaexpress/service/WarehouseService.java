@@ -3,6 +3,7 @@ package com.mayaexpress.service;
 import com.mayaexpress.entity.Department;
 import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.exception.APIException;
+import com.mayaexpress.exception.ResourceNotFoundException;
 import com.mayaexpress.repository.DestinationRepository;
 import com.mayaexpress.repository.WarehouseRepository;
 import com.mayaexpress.util.MergeEntity;
@@ -12,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -73,5 +75,20 @@ public class WarehouseService {
             throw new APIException(HttpStatus.NOT_FOUND, "Warehouse not found.");
         }
         return warehouseDB.get();
+    }
+
+    public List<Warehouse> getBranches(){
+        return warehouseRepository.findAllByIsBranchIsTrue();
+    }
+
+    public Warehouse getBranch(Integer id){
+        Optional<Warehouse> warehouseOptional= warehouseRepository.findById(id);
+        if(warehouseOptional.isEmpty()){
+            throw new ResourceNotFoundException("Branch","ID",id);
+        }
+        if (!warehouseOptional.get().getIsBranch()){
+            throw new APIException(HttpStatus.NOT_FOUND,"ID is not a Branch");
+        }
+        return warehouseOptional.get();
     }
 }

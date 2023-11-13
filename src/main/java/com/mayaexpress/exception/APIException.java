@@ -14,11 +14,6 @@ public class APIException extends RuntimeException{
 
     }
 
-    public APIException(String message, HttpStatus status, String message1) {
-        super(message);
-        this.status = status;
-        this.message = message1;
-    }
 
     @Override
     public String getMessage() {

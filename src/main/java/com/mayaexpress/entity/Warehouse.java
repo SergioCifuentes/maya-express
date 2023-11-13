@@ -40,4 +40,17 @@ public class Warehouse {
     @ManyToOne
     @JoinColumn(name = "destination_id", nullable = false)
     private Department department;
+
+    @Override
+    public String toString() {
+        return "Warehouse{" +
+                "id=" + id +
+                ", address='" + address + '\'' +
+                ", squareMeters=" + squareMeters +
+                ", maxWeightLbs=" + maxWeightLbs +
+                ", isEnable=" + isEnable +
+                ", isBranch=" + isBranch +
+                ", department=" + department +
+                '}';
+    }
 }

@@ -1,5 +1,6 @@
 package com.mayaexpress.controller;
 
+import com.mayaexpress.entity.Price;
 import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.WarehouseService;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.List;
 
 @RestController()
 @RequestMapping("/api/admin/warehouse")
@@ -97,5 +99,21 @@ public class WarehouseController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @GetMapping("/branch")
+    public ResponseEntity<List<Warehouse>> getBranches(){
+        try{
+            return ResponseEntity.ok(warehouseService.getBranches());
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @GetMapping("/branch/{id}")
+    public ResponseEntity<Warehouse> getBranch(@Valid @PathVariable Integer id){
+        return ResponseEntity.ok(warehouseService.getBranch(id));
+
+    }
 
 }
