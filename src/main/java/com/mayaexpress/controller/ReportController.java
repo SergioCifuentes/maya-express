@@ -1,14 +1,17 @@
 package com.mayaexpress.controller;
 
+import com.mayaexpress.dto.request.DateDTO;
 import com.mayaexpress.dto.response.MostPopularDestinationDTO;
+import com.mayaexpress.entity.Warehouse;
+import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.ReportService;
+import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
 import java.util.List;
 
 @RestController()
@@ -22,8 +25,12 @@ public class ReportController {
     }
 
     //@PreAuthorize("hasAuthority('ADMIN')")
-    @GetMapping("/most-popular-destinations")
-    public ResponseEntity<List<MostPopularDestinationDTO>> getMostPopularDestinations() {
-        return ResponseEntity.ok(reportService.getMostPopularDestinations());
+    @PostMapping("/most-popular-destinations")
+    public ResponseEntity<List<MostPopularDestinationDTO>> getMostPopularDestinations(@Valid @RequestBody DateDTO dateDTO) {
+        try {
+            return ResponseEntity.ok(reportService.getMostPopularDestinations(dateDTO));
+        } catch (InternalServerException | ParseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
     }
 }
