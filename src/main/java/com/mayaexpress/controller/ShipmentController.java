@@ -1,8 +1,10 @@
 package com.mayaexpress.controller;
 
 
+import com.google.zxing.WriterException;
 import com.mayaexpress.dto.request.*;
 
+import com.mayaexpress.dto.response.ShipmentHistoryDTO;
 import com.mayaexpress.entity.*;
 import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.ShipmentService;
@@ -117,8 +119,7 @@ public class ShipmentController {
     public ResponseEntity<String> getQR(@Valid @PathVariable Integer id){
         try {
             return ResponseEntity.ok(shipmentService.getQR(id));
-        } catch (Exception e) {
-
+        } catch (InternalServerException | IOException | WriterException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
@@ -135,7 +136,13 @@ public class ShipmentController {
         }
     }
 
-    @GetMapping("/history/{id}")
-    public ResponseEntity<>
+    @GetMapping("/locate-package/{id}")
+    public ResponseEntity<ShipmentHistoryDTO> locatePackage(@Valid @PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(shipmentService.locatePackage(id));
+        } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
 }
