@@ -15,8 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.io.IOException;
-import java.math.BigDecimal;
 import java.net.URI;
 import java.util.List;
 
@@ -105,9 +103,9 @@ public class ShipmentController {
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @PostMapping("/entrance")
-    public ResponseEntity<List<ShipmentHistory>> registerEntrance(@Valid @RequestBody WarehouseEntranceDTO warehouseEntranceDTO) {
+    public ResponseEntity<List<ShipmentHistory>> registerEntrance(@Valid @RequestBody WarehouseMovementDTO warehouseMovementDTO) {
         try {
-            List<ShipmentHistory> newHistory = shipmentService.registerEntrance(warehouseEntranceDTO);
+            List<ShipmentHistory> newHistory = shipmentService.registerEntrance(warehouseMovementDTO);
             return ResponseEntity.ok(newHistory);
         } catch (InternalServerException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
@@ -124,6 +122,16 @@ public class ShipmentController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @PostMapping("/departure")
+    public ResponseEntity<List<ShipmentHistory>> registerDeparture(@Valid @RequestBody WarehouseMovementDTO warehouseMovementDTO) {
+        try {
+            List<ShipmentHistory> newHistory = shipmentService.registerDeparture(warehouseMovementDTO);
+            return ResponseEntity.ok(newHistory);
+        } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 
     @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT') or hasAnyAuthority('EMPLOYEE')")
     @PutMapping("/receive/")

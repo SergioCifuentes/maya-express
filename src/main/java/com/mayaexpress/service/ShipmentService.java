@@ -132,19 +132,39 @@ public class ShipmentService {
     }
 
 
-    public List<ShipmentHistory> registerEntrance(WarehouseEntranceDTO warehouseEntranceDTO){
+    public List<ShipmentHistory> registerEntrance(WarehouseMovementDTO warehouseMovementDTO){
         ShipmentHistory shipmentHistory;
 
-        Warehouse warehouse= getWarehouse(warehouseEntranceDTO.getWarehouseId());
-        Trip trip= getTrip(warehouseEntranceDTO.getTripId());
+        Warehouse warehouse= getWarehouse(warehouseMovementDTO.getWarehouseId());
+        Trip trip= getTrip(warehouseMovementDTO.getTripId());
         List<ShipmentHistory> histories = new ArrayList<>();
-        for (Integer shipmentId:warehouseEntranceDTO.getShipmentId()) {
+        for (Integer shipmentId: warehouseMovementDTO.getShipmentId()) {
             Shipment shipment= getShipment(shipmentId);
             if(warehouse.getId()==shipment.getReceiveWarehouse().getId()){
-                shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.READY,new Date(),warehouse,null);
+                shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.READY,warehouseMovementDTO.getDate(),warehouse,null);
             }else{
                 Trip nextTrip = getNextTrip(shipment,trip);
-                shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.ENTRANCE,new Date(),warehouse,nextTrip);
+                shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.ENTRANCE,warehouseMovementDTO.getDate(),warehouse,nextTrip);
+            }
+            histories.add(shipmentHistory);
+        }
+
+        histories=shipmentHistoryRepository.saveAll(histories);
+        return histories;
+    }
+
+    public List<ShipmentHistory> registerDeparture(WarehouseMovementDTO warehouseMovementDTO) {
+        ShipmentHistory shipmentHistory;
+        Warehouse warehouse= getWarehouse(warehouseMovementDTO.getWarehouseId());
+        Trip trip= getTrip(warehouseMovementDTO.getTripId());
+        List<ShipmentHistory> histories = new ArrayList<>();
+        for (Integer shipmentId: warehouseMovementDTO.getShipmentId()) {
+            Shipment shipment= getShipment(shipmentId);
+            Optional<ShipmentTrip> shipmentTripOptional = shipmentTripRepository.findByShipmentAndTrip(shipment,trip);
+            if(shipmentTripOptional.isPresent()){
+                shipmentHistory=new ShipmentHistory(null,shipment,HistoryState.IN_ROUTE,warehouseMovementDTO.getDate(),warehouse,trip);
+            }else{
+                throw new APIException(HttpStatus.CONFLICT,"Package (ID:"+shipmentId +") should not board Vehicle");
             }
             histories.add(shipmentHistory);
         }
@@ -161,7 +181,7 @@ public class ShipmentService {
     public ShipmentHistory receive(ReceiveDTO receiveDTO){
         Shipment shipment= getShipment(receiveDTO.getShipmentId());
         Warehouse warehouse= getWarehouse(receiveDTO.getWarehouseId());
-        ShipmentHistory shipmentHistory= new ShipmentHistory(null, shipment, HistoryState.RECEIVED,new Date(), warehouse,null);
+        ShipmentHistory shipmentHistory= new ShipmentHistory(null, shipment, HistoryState.RECEIVED,receiveDTO.getDate(), warehouse,null);
         return shipmentHistoryRepository.save(shipmentHistory);
     }
 
@@ -217,4 +237,6 @@ public class ShipmentService {
         }
         return optionalShipmentHistoryDTO.get();
     }
+
+
 }
