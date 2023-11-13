@@ -37,7 +37,19 @@ public class Warehouse {
     @Column(name = "is_branch", nullable = false)
     private Boolean isBranch;
 
+    @ManyToOne
+    private Department department;
 
-
-
+    @Override
+    public String toString() {
+        return "Warehouse{" +
+                "id=" + id +
+                ", address='" + address + '\'' +
+                ", squareMeters=" + squareMeters +
+                ", maxWeightLbs=" + maxWeightLbs +
+                ", isEnable=" + isEnable +
+                ", isBranch=" + isBranch +
+                ", department=" + department +
+                '}';
+    }
 }

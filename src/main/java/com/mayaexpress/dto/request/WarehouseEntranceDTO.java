@@ -4,12 +4,13 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class WarehouseEntranceDTO {
 
     @NotBlank(message = "shipmentId es obligatorio")
-    private Integer shipmentId;
+    private List<Integer> shipmentId;
 
     @NotBlank(message = "warehouseId es obligatorio")
     private Integer warehouseId;
