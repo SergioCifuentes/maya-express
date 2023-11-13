@@ -1,5 +1,6 @@
 package com.mayaexpress.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -21,12 +22,14 @@ public class ShipmentHistory {
     private Integer id;
 
     @ManyToOne
+    @JsonIgnore
     private Shipment shipment;
 
     @Column(name="state",nullable = false)
     private HistoryState state;
 
     @Column(name = "date")
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm a")
     private Date date;
 
     @ManyToOne
