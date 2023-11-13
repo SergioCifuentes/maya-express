@@ -135,4 +135,7 @@ public class ShipmentController {
         }
     }
 
+    @GetMapping("/history/{id}")
+    public ResponseEntity<>
+
 }

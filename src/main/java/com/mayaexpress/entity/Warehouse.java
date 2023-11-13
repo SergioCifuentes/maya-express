@@ -37,7 +37,7 @@ public class Warehouse {
     @Column(name = "is_branch", nullable = false)
     private Boolean isBranch;
 
-
-
-
+    @ManyToOne
+    @JoinColumn(name = "destination_id", nullable = false)
+    private Department department;
 }

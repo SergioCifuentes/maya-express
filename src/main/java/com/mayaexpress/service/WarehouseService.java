@@ -1,7 +1,9 @@
 package com.mayaexpress.service;
 
+import com.mayaexpress.entity.Department;
 import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.exception.APIException;
+import com.mayaexpress.repository.DestinationRepository;
 import com.mayaexpress.repository.WarehouseRepository;
 import com.mayaexpress.util.MergeEntity;
 import org.springframework.data.domain.Page;
@@ -17,10 +19,13 @@ public class WarehouseService {
 
     private final WarehouseRepository warehouseRepository;
     private final MergeEntity<Warehouse> merge;
+    private final DestinationRepository destinationRepository;
 
-    public WarehouseService(WarehouseRepository warehouseRepository){
+
+    public WarehouseService(WarehouseRepository warehouseRepository, DestinationRepository destinationRepository){
         this.warehouseRepository = warehouseRepository;
         this.merge = new MergeEntity<>();
+        this.destinationRepository = destinationRepository;
     }
 
     public void create(Warehouse warehouse) {
@@ -28,6 +33,8 @@ public class WarehouseService {
             Optional<Warehouse> warehouseOptional = warehouseRepository.findById(warehouse.getId());
             if (warehouseOptional.isPresent()) throw new APIException(HttpStatus.CONFLICT,"ID Already Exists");
         }
+        Optional<Department> department = destinationRepository.findById(warehouse.getDepartment().getId());
+        if (department.isEmpty()) throw new APIException(HttpStatus.NOT_FOUND, "Destination not found.");
         warehouseRepository.save(warehouse);
     }
 
