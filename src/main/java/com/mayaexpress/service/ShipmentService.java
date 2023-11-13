@@ -11,6 +11,7 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.mayaexpress.dto.request.PackageDTO;
 import com.mayaexpress.dto.request.ShipmentDTO;
 
+import com.mayaexpress.dto.response.ShipmentHistoryDTO;
 import com.mayaexpress.entity.*;
 import com.mayaexpress.entity.Package;
 import com.mayaexpress.exception.APIException;
@@ -207,6 +208,13 @@ public class ShipmentService {
         ImageIO.write(qrImage, "png", qr);
 
         return Base64.encodeBase64String(qr.toByteArray());
+    }
 
+    public ShipmentHistoryDTO locatePackage(Integer id) {
+        Optional<ShipmentHistoryDTO> optionalShipmentHistoryDTO = shipmentHistoryRepository.findLatestShipmentPaymentDetails(id);
+        if (optionalShipmentHistoryDTO.isEmpty()) {
+            throw new ResourceNotFoundException("Shipment", "ID", id);
+        }
+        return optionalShipmentHistoryDTO.get();
     }
 }
