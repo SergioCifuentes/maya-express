@@ -3,11 +3,10 @@ package com.mayaexpress.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
-import java.util.Date;
 import java.util.List;
 
 @Data
-public class WarehouseEntranceDTO {
+public class WarehouseMovementDTO {
 
     @NotBlank(message = "shipmentId es obligatorio")
     private List<Integer> shipmentId;
