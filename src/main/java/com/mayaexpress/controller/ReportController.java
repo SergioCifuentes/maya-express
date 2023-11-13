@@ -2,6 +2,7 @@ package com.mayaexpress.controller;
 
 import com.mayaexpress.dto.request.DateDTO;
 import com.mayaexpress.dto.response.MostPopularDestinationDTO;
+import com.mayaexpress.dto.response.MovementsByRegionDTO;
 import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.exception.InternalServerException;
 import com.mayaexpress.service.ReportService;
@@ -24,11 +25,21 @@ public class ReportController {
         this.reportService = reportService;
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/most-popular-destinations")
     public ResponseEntity<List<MostPopularDestinationDTO>> getMostPopularDestinations(@Valid @RequestBody DateDTO dateDTO) {
         try {
             return ResponseEntity.ok(reportService.getMostPopularDestinations(dateDTO));
+        } catch (InternalServerException | ParseException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @PostMapping("/movements-by-region")
+    public ResponseEntity<List<MovementsByRegionDTO>> getMovementsByRegion(@Valid @RequestBody DateDTO dateDTO) {
+        try {
+            return ResponseEntity.ok(reportService.getMovementsByRegion(dateDTO));
         } catch (InternalServerException | ParseException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
