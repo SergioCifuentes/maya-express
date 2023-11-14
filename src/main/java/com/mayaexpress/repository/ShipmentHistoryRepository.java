@@ -33,4 +33,16 @@ public interface ShipmentHistoryRepository extends JpaRepository<ShipmentHistory
             @Param("startDate") String startDate,
             @Param("endDate") String endDate
     );
+
+    @Query("SELECT sh.shipment.id AS shipment_id, sh.state, sh.date, s.receiveWarehouse.id AS receive_warehouse_id " +
+            "FROM ShipmentHistory sh " +
+            "INNER JOIN sh.shipment s " +
+            "INNER JOIN s.receiveWarehouse d " +
+            "WHERE s.receiveWarehouse.id = :receiveWarehouseId " +
+            "AND sh.date = (SELECT MAX(sh2.date) " +
+            "FROM ShipmentHistory sh2 " +
+            "WHERE sh2.shipment.id = sh.shipment.id) " +
+            "ORDER BY sh.shipment.id")
+    List<Object[]> findLatestShipmentHistoryByReceiveWarehouseId(
+            @Param("receiveWarehouseId") Integer receiveWarehouseId);
 }

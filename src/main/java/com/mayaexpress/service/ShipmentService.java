@@ -11,6 +11,8 @@ import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import com.mayaexpress.dto.request.PackageDTO;
 import com.mayaexpress.dto.request.ShipmentDTO;
 
+import com.mayaexpress.dto.response.GuideHistoryDTO;
+import com.mayaexpress.dto.response.MovementsByRegionDTO;
 import com.mayaexpress.dto.response.ShipmentHistoryDTO;
 import com.mayaexpress.entity.*;
 import com.mayaexpress.entity.Package;
@@ -29,7 +31,10 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ShipmentService {
@@ -238,5 +243,12 @@ public class ShipmentService {
         return optionalShipmentHistoryDTO.get();
     }
 
+    public List<GuideHistoryDTO> getGuideHistory(Integer destination) {
+        List<Object[]> results = shipmentHistoryRepository.findLatestShipmentHistoryByReceiveWarehouseId(destination);
 
+        return results.stream()
+                .map(GuideHistoryDTO::new)
+                .filter(dto -> dto.getState() != HistoryState.RECEIVED)
+                .collect(Collectors.toList());
+    }
 }
