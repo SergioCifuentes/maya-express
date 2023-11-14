@@ -4,6 +4,8 @@ package com.mayaexpress.controller;
 import com.google.zxing.WriterException;
 import com.mayaexpress.dto.request.*;
 
+import com.mayaexpress.dto.response.GuideHistoryDTO;
+import com.mayaexpress.dto.response.MovementsByRegionDTO;
 import com.mayaexpress.dto.response.ShipmentHistoryDTO;
 import com.mayaexpress.entity.*;
 import com.mayaexpress.exception.InternalServerException;
@@ -17,6 +19,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.io.IOException;
 import java.net.URI;
+import java.text.ParseException;
 import java.util.List;
 
 @RestController
@@ -154,4 +157,13 @@ public class ShipmentController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN')")
+    @GetMapping("/guides-by-department/{id}")
+    public ResponseEntity<List<GuideHistoryDTO>> getGuidesByDepartment(@Valid @PathVariable Integer id) {
+        try {
+            return ResponseEntity.ok(shipmentService.getGuideHistory(id));
+        } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
