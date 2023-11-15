@@ -5,12 +5,14 @@ import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.exception.ResourceNotFoundException;
 import com.mayaexpress.repository.DestinationRepository;
+import com.mayaexpress.repository.TripRepository;
 import com.mayaexpress.repository.WarehouseRepository;
 import com.mayaexpress.util.MergeEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,11 +25,14 @@ public class WarehouseService {
     private final MergeEntity<Warehouse> merge;
     private final DestinationRepository destinationRepository;
 
+    private final TripRepository tripRepository;
 
-    public WarehouseService(WarehouseRepository warehouseRepository, DestinationRepository destinationRepository){
+
+    public WarehouseService(WarehouseRepository warehouseRepository, DestinationRepository destinationRepository,TripRepository tripRepository){
         this.warehouseRepository = warehouseRepository;
         this.merge = new MergeEntity<>();
         this.destinationRepository = destinationRepository;
+        this.tripRepository=tripRepository;
     }
 
     public void create(Warehouse warehouse) {
@@ -90,5 +95,14 @@ public class WarehouseService {
             throw new APIException(HttpStatus.NOT_FOUND,"ID is not a Branch");
         }
         return warehouseOptional.get();
+    }
+
+    public ResponseEntity getTrips(Integer id) {
+        Optional<Warehouse> warehouseOptional= warehouseRepository.findById(id);
+        if(warehouseOptional.isEmpty()){
+            throw new ResourceNotFoundException("Warehouse","ID",id);
+        }
+        return ResponseEntity.ok().body(tripRepository.getTripsByWarehouse(id));
+
     }
 }

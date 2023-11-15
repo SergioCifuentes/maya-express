@@ -29,4 +29,6 @@ public class Trip {
     @Column(name="date", nullable = false)
     private Date date;
 
+
+
 }

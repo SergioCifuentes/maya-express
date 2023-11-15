@@ -38,7 +38,7 @@ public class Warehouse {
     private Boolean isBranch;
 
     @ManyToOne
-    @JoinColumn(name = "destination_id", nullable = false)
+    @JoinColumn(name = "department_id", nullable = false)
     private Department department;
 
     @Override
