@@ -677,3 +677,76 @@ insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
 values(29,800,'P152ABC',1,27);
 insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
 values(30,250,'P153ABC',0,27);
+
+INSERT INTO public.shipment_payment(
+	pay_date, is_paided, total)
+	VALUES 
+	('2023-11-05', true, 100.00),
+	('2023-11-05', true, 100.00),
+	('2023-10-05', true, 300.00),
+	('2023-09-05', true, 150.00),
+	('2023-11-07', true, 143.00),
+	('2023-11-06', true, 140.00),
+	('2023-11-05', true, 130.00),
+	('2023-11-04', true, 160.00),
+	('2023-11-08', true, 140.00),
+	('2023-11-11', true, 100.00);
+
+
+INSERT INTO public.shipment(
+	address, client_receiving_name, client_sending_name, expected_date, send_date, receive_warehouse_id, sending_warehouse_id, shipment_payment)
+	VALUES 
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-11', '2023-11-05', 2, 1, 1),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-14', '2023-11-05', 3 1, 2),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-14', '2023-10-03', 4 2, 3),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-11', '2023-09-04', 5 2, 4),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-14', '2023-11-05', 6 3, 5),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-13', '2023-11-06', 7 3, 6),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-16', '2023-11-04', 8 4, 7),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-17', '2023-11-15', 9 1, 8),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-18', '2023-11-25', 2, 1, 9),
+	('3ra. Quetzaltenango', 'Juan', 'Pedro', '2023-11-19', '2023-11-05', 2, 1, 10);
+
+INSERT INTO public."package"(
+	description, sub_total, weight_lbs, shipment_id)
+	VALUES 
+	('Audifonos', 25.50, 2, 1),
+	('Caja', 45.50, 3, 1),
+	('Zapato', 55.50, 4, 2),
+	('Lego', 35.50, 2, 2),
+	('Laptop', 205.50, 3, 3),
+	('Oso', 25.50, 5, 3),
+	('Audifonos 1', 205.50, 2, 5),
+	('Audifonos 2', 235.50, 1, 5),
+	('Audifonos 3', 245.50, 3, 4),
+	('Caja', 325.50, 6, 6),
+	('Teclado', 325.50, 1, 6),
+	('Mouse', 525.50, 3, 7),
+	('Llave', 425.50, 6, 8),
+	('Taza', 254.50, 2, 7),
+	('Silla', 235.50, 3, 6),
+	('Reloj', 253.50, 2, 9),
+	('Audifonos 1', 252.50, 3, 10),
+	('Audifonos 2', 235.50, 2, 10),
+	('Audifonos 3', 251.50, 2, 1),
+	('Audifonos 4', 245.50, 2, 1),
+	('Taza', 251.50, 2, 10),
+	('Audifonos', 253.50, 2, 3);
+	
+INSERT INTO public.cost(
+	amount, date, description, cost_type_id, branch)
+	VALUES 
+	(1, '2023-10-11', 'Agua', 1, 1),
+	(1, '2023-10-12', 'Luz', 1, 2),
+	(1, '2023-11-13', 'Internet', 1, 2),
+	(1, '2023-10-14', 'Otros', 2, 3),
+	(1, '2023-11-15', 'Servicios', 2, 3),
+	(1, '2023-11-01', 'Alquiler', 1, 4),
+	(1, '2023-11-10', 'Agua', 4, 5),
+	(1, '2023-10-12', 'Agua', 2, 6),
+	(1, '2023-10-13', 'Luz', 2, 7),
+	(1, '2023-09-11', 'Internet', 3, 7),
+	(1, '2023-10-11', 'Luz', 1, 8),
+	(1, '2023-11-21', 'Luz', 4, 9),
+	(1, '2023-11-11', 'Internet', 3, 10),
+	(1, '2023-11-01', 'Gasolina', 2, 10);

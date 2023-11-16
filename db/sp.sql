@@ -28,7 +28,7 @@ BEGIN
             WHEN is_origin THEN warehouse.id = shipment.sending_warehouse_id
             ELSE warehouse.id = shipment.receive_warehouse_id
         END
-    INNER JOIN destination ON destination.id = warehouse.destination_id
+    INNER JOIN destination ON destination.id = warehouse.department_id
     GROUP BY destination.region;
 
 END;
@@ -64,7 +64,7 @@ BEGIN
             WHEN is_origin THEN warehouse.id = shipment.sending_warehouse_id
             ELSE warehouse.id = shipment.receive_warehouse_id
         END
-    INNER JOIN destination ON destination.id = warehouse.destination_id
+    INNER JOIN destination ON destination.id = warehouse.department_id
     GROUP BY destination.name
 	ORDER BY packages_count DESC;
 
