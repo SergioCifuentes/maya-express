@@ -555,3 +555,125 @@ insert into price (cost_x_lb, sending_cost, destination, origin) values (17.3, 4
 insert into price (cost_x_lb, sending_cost, destination, origin) values (13.17, 45.74, 22, 20);
 insert into price (cost_x_lb, sending_cost, destination, origin) values (15.04, 46.05, 22, 21);
 insert into price (cost_x_lb, sending_cost, destination, origin) values (15.32, 32.28, 22, 22);
+
+
+--Warehouse
+
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (1,'2a Ave, Zona 1', true, true, '10000','500',1);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (2,'3a Calle, Zona 12', false, true, '15000','700',1);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (3,'1a Ave, Zona 10', true, true, '6000','300',1);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (4,'2a Ave, Zona 2', true, true, '10000','500',2);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (5,'4a Ave, Zona 1', true, true, '9000','400',3);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (6,'5a Calle, Zona 1', true, true, '9000','400',4);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (7,'6a Calle, Zona 1', true, true, '1000','250',5);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (8,'6a Ave, Zona 4', false, true, '9000','400',5);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (9,'5a Ave, Zona 2', true, true, '9000','400',6);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (10,'5a Ave, Zona 4', true, true, '9000','400',7);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (11,'4a Ave, Zona 5', true, true, '5000','250',8);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (12,'2a Ave, Zona 1', true, true, '4000','200',9);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (13,'1a Calle, Zona 2', true, true, '9000','400',10);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (14,'2a Calle, Zona 5', true, true, '9000','400',11);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (15,'3a Calle, Zona 4', true, true, '10000','500',12);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (16,'1a Ave, Zona 2', true, true, '1000','100',13);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (17,'2a Ave, Zona 3', true, true, '9000','400',14);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (18,'4a Ave, Zona 1', true, true, '9000','400',15);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (19,'4a Ave, Zona 1', true, true, '4000','150',16);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (20,'2a Ave, Zona 3', false, true, '10000','500',16);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (21,'3a Ave, Zona 3', true, true, '6000','300',17);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (22,'1a Calle, Zona 5', true, true, '8000','300',18);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (23,'4a Ave, Zona 4', true, true, '8000','300',19);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (24,'5a Calle, Zona 2', true, true, '8000','300',20);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (25,'3a Calle, Zona 1', true, true, '8000','300',21);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (26,'1a Ave, Zona 10', true, true, '800','200',22);
+insert into warehouse(id, address, is_branch, is_enable, max_weight_lbs, square_meters, department_id)
+values (27,'1a Calle, Zona 1', false, true, '10000','500',22);
+
+--Vehicle
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(1,200,'P123ABC',0,1);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(2,800,'P124ABD',1,1);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(3,800,'P125ABD',1,2);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(4,200,'P126ABD',0,3);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(5,200,'P127ABC',0,4);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(6,300,'P128ABC',0,5);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(7,250,'P129ABC',0,6);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(31,250,'P130ABC',0,7);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(8,1000,'P131ABC',1,8);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(9,250,'P132ABC',0,8);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(10,250,'P133ABC',0,9);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(11,300,'P134ABC',0,10);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(12,250,'P135ABC',0,11);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(13,150,'P136ABC',0,12);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(14,200,'P137ABC',0,13);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(15,250,'P138ABC',0,14);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(16,200,'P139ABC',0,15);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(17,200,'P140ABC',0,16);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(18,1000,'P141ABC',1,17);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(19,200,'P142ABC',0,18);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(20,200,'P143ABC',0,19);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(21,250,'P144ABC',0,20);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(22,300,'P145ABC',0,20);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(23,200,'P146ABC',0,21);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(24,200,'P147ABC',0,22);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(25,200,'P148ABC',0,23);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(26,200,'P149ABC',0,24);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(27,200,'P150ABC',0,25);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(28,200,'P151ABC',0,26);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(29,800,'P152ABC',1,27);
+insert into vehicle(id, max_weight, plate, vehicle_type, warehouse_id)
+values(30,250,'P153ABC',0,27);
