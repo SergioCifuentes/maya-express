@@ -41,7 +41,7 @@ public class CostController {
         }
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/allCostType/")
     public ResponseEntity<Page<CostType>> getAllCostType(CommonParams commonParams){
         try {

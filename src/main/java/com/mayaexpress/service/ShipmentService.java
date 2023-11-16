@@ -240,6 +240,8 @@ public class ShipmentService {
         if (optionalShipmentHistoryDTO.isEmpty()) {
             throw new ResourceNotFoundException("Shipment", "ID", id);
         }
+        Shipment shipment = shipmentRepository.findById(id).get();
+        optionalShipmentHistoryDTO.get().setDate(shipment.getExpectedDate());
         return optionalShipmentHistoryDTO.get();
     }
 
