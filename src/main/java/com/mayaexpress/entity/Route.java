@@ -24,13 +24,14 @@ public class Route {
     private Vehicle vehicle;
 
     @ManyToOne
-    private Warehouse destination;
+    private Warehouse homeWarehouse;
+
+    @ManyToOne
+    private Warehouse awayWarehouse;
 
     @Column(name="departure_day",nullable = false)
     private DayOfTheWeek departureDay;
 
-    @Column(name="return_day",nullable = false)
-    private DayOfTheWeek returnDay;
 
     @Column(name="hours",nullable = false)
     private Integer hours;
@@ -39,11 +40,9 @@ public class Route {
     @Temporal(TemporalType.TIME)
     private Date departureTime;
 
-    @Column(name="return_time",nullable = false)
-    @Temporal(TemporalType.TIME)
-    private Date returnTime;
 
-
+    @Column(name="isDeparture",nullable = false)
+    private Boolean isDeparture;
 
 
 
