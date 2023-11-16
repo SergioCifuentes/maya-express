@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity(name = "Cost")
@@ -29,4 +30,7 @@ public class Cost {
 
     @ManyToOne
     private CostType costType;
+
+    @Column(name="amount", nullable = false, precision = 5, scale = 2)
+    private BigDecimal amount;
 }
