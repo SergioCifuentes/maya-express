@@ -22,4 +22,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, BigDecimal> 
     Page<Employee> findAllByIsEnableIsTrue(Pageable pageable);
 
     Page<Employee> findAllByIsEnableIsFalse(Pageable pageable);
+
+    List<Employee> findAllByWarehouse_Id(Integer warehouse_id);
 }

@@ -3,6 +3,7 @@ package com.mayaexpress.controller;
 import com.mayaexpress.dto.request.DateDTO;
 import com.mayaexpress.dto.response.PackagesByDepartmentDTO;
 import com.mayaexpress.dto.response.PackagesByRegionDTO;
+import com.mayaexpress.dto.response.WarehouseDTO;
 import com.mayaexpress.service.DecisionalService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -57,6 +58,24 @@ public class DecisionalController {
     public ResponseEntity<List<PackagesByDepartmentDTO>> getSuggestionDepartmentReceive(@Valid @RequestBody DateDTO dateDTO) {
         try {
             return ResponseEntity.ok(decisionalService.getSuggestionDepartment(false, dateDTO));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/branches-suggestions-employees")
+    public ResponseEntity<List<WarehouseDTO>> getBranchesSuggestionsEmployees(@Valid @RequestBody DateDTO dateDTO) {
+        try {
+            return ResponseEntity.ok(decisionalService.getSuggestionWarehouse(dateDTO, true));
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    @PostMapping("/branches-suggestions-vehicles")
+    public ResponseEntity<List<WarehouseDTO>> getBranchesSuggestionsVehicles(@Valid @RequestBody DateDTO dateDTO) {
+        try {
+            return ResponseEntity.ok(decisionalService.getSuggestionWarehouse(dateDTO, false));
         } catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
