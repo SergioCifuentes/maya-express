@@ -37,7 +37,6 @@ public class RouteService {
 
         }
         trips.addAll(createTripsByDate(start,routes));
-        trips.forEach(System.out::println);
         return tripRepository.saveAll(trips).size();
     }
 
@@ -46,7 +45,6 @@ public class RouteService {
         List<Trip> trips= new ArrayList<>();
         for (Route route: routes){
             if (route.getDepartureDay().ordinal()==day){
-                System.out.println(route.getDepartureDay().ordinal());
                 trips.add(new Trip(null, 0f, route, date.getTime()));
             }
 
