@@ -12,7 +12,7 @@ import java.util.Optional;
 
 public interface ShipmentHistoryRepository extends JpaRepository<ShipmentHistory, Integer> {
 
-    @Query("SELECT NEW com.mayaexpress.dto.response.ShipmentHistoryDTO(sh.date, sp.isPaid, sp.total) " +
+    @Query("SELECT NEW com.mayaexpress.dto.response.ShipmentHistoryDTO(sh.date, sp.isPaid, sp.total, sh.warehouse) " +
             "FROM ShipmentHistory sh " +
             "INNER JOIN ShipmentPayment sp ON sh.shipment.id = sp.id " +
             "WHERE sh.shipment.id = :shipmentId " +
