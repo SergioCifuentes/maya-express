@@ -1,5 +1,6 @@
 package com.mayaexpress.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +10,9 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity(name="Trip")
-@Table(name = "TRIP")
+@Table(name = "TRIP", uniqueConstraints={
+        @UniqueConstraint(columnNames = {"route_id", "date"})
+})
 @Getter
 @Setter
 @AllArgsConstructor
@@ -26,9 +29,17 @@ public class Trip {
     @ManyToOne
     private Route route;
 
+    @JsonFormat(pattern="yyyy-MM-dd")
     @Column(name="date", nullable = false)
     private Date date;
 
-
-
+    @Override
+    public String toString() {
+        return "Trip{" +
+                "id=" + id +
+                ", currentWeight=" + currentWeight +
+                ", route=" + route +
+                ", date=" + date +
+                '}';
+    }
 }

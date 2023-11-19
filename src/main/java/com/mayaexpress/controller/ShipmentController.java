@@ -166,4 +166,13 @@ public class ShipmentController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    @PostMapping("/createTrips")
+    public ResponseEntity<String> createTrips(@Valid @RequestBody TripCreationDTO tripCreationDTO) {
+        try {
+            return ResponseEntity.ok("Trips created "+shipmentService.createTrips(tripCreationDTO));
+        } catch (InternalServerException ex) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }
