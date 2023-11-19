@@ -54,7 +54,8 @@ public class ShipmentService {
 
     private final ShipmentTripRepository shipmentTripRepository;
 
-    private final TripRepository tripRepository;
+    private final RouteService routeService;
+
 
     @Value("${url-maya-express-qr}")
     private String urlLocalize;
@@ -70,7 +71,7 @@ public class ShipmentService {
                             WarehouseRepository warehouseRepository,
                            ShipmentRepository shipmentRepository, PackageRepository packageRepository,
                            ShipmentHistoryRepository shipmentHistoryRepository, ShipmentTripRepository shipmentTripRepository,
-                           TripRepository tripRepository) {
+                           RouteService routeService) {
         this.destinationRepository = destinationRepository;
         this.warehouseRepository=warehouseRepository;
         this.shipmentRepository=shipmentRepository;
@@ -78,7 +79,7 @@ public class ShipmentService {
         this.economicService=economicService;
         this.shipmentHistoryRepository=shipmentHistoryRepository;
         this.shipmentTripRepository= shipmentTripRepository;
-        this.tripRepository= tripRepository;
+        this.routeService=routeService ;
     }
 
 
@@ -206,11 +207,7 @@ public class ShipmentService {
         return optionalWarehouse.get();
     }
     public Trip getTrip(Integer id) {
-        Optional<Trip> optionalTrip = tripRepository.findById(id);
-        if (optionalTrip.isEmpty()) {
-            throw new ResourceNotFoundException("Trip", "ID", id);
-        }
-        return optionalTrip.get();
+        return routeService.getTrip(id);
     }
 
     public String getQR(Integer id) throws IOException, WriterException {
@@ -252,5 +249,9 @@ public class ShipmentService {
                 .map(GuideHistoryDTO::new)
                 .filter(dto -> dto.getState() != HistoryState.RECEIVED)
                 .collect(Collectors.toList());
+    }
+
+    public Integer createTrips(TripCreationDTO tripCreationDTO){
+        return routeService.createTrips(tripCreationDTO);
     }
 }
