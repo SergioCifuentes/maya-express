@@ -118,17 +118,20 @@ public class ShipmentService {
         Warehouse warehouse= getWarehouse(shipmentDTO.getBranchId());
         Warehouse warehouseRec = getWarehouse(shipmentDTO.getReceiveBranchId());
         Shipment shipment = new Shipment(null,warehouse, shipmentDTO.getClientSendingName(), shipmentDTO.getClientReceiveName(),
-                shipmentDTO.getSendDate(),shipmentDTO.getAddress(),warehouseRec,null,null,null);
+                shipmentDTO.getSendDate().getTime(),shipmentDTO.getAddress(),warehouseRec,null,null,null);
         shipment=shipmentRepository.save(shipment);
+        System.out.println(shipmentDTO.getSendDate().getTime());
         Set<Package> packs = new HashSet<>();
+
         for (PackageDTO pa: shipmentDTO.getPackages()) {
             Package pack = new Package(null, pa.getWeightLbs(),pa.getDescription(), shipment,pa.getSubTotal());
             packs.add(packageRepository.save(pack));
         }
         shipment.setShipmentPayment(economicService.createShipmentPayment(shipment,shipmentDTO.getIsPaid(),shipmentDTO.getTotal(),
                 (shipmentDTO.getIsPaid())?shipmentDTO.getPayDate():null));
-
+        routeService.findRoute(shipment,shipmentDTO.getTotal().doubleValue());
         shipment.setPackages(packs);
+
         return shipment;
     }
 

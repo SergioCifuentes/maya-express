@@ -1,0 +1,47 @@
+warehouse
+trips = getTrips after before dates
+trips.removeByWarehouse
+trips.removeByVehicleWeight
+tryTrips=getTryTrips(trips, warehouse)
+DTO=getRoutes(warehouse, warehouseD,currentTime,bestTime,tryTrips, trips, sendDate)
+
+{
+Best DTO=null
+for tryTrips{
+
+    if(trip is destination){
+     DTO1(addTrip, addTime, complete=true)
+     }else{
+         new tripsCopy = copy trips
+         new tryTrips2=getTryTrips(tripsCopy, warehouse)
+         Integer timeTo getTimeToTrip(trip,currentTime,sendDate)
+         currentTime2=currentTime+timeTo+1
+         if(currentTime2isInMap || bestime<currentTime2){
+         return null;
+         }
+         }
+      DTO1=getRoutes(warehouse, warehouseD,currentTime2,bestTime,tryTrips2, tripsCopy, sendDate)
+     }
+
+    if(DTO==null){
+        DTO=DTO1
+    }else if(DTO1!=null){
+    compare DTO
+    }
+
+}
+ return DTO
+}
+
+
+
+
+
+
+
+
+DTO={
+List<Trip>
+time
+complete
+}

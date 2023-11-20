@@ -4,6 +4,7 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.util.Calendar;
 import java.util.Date;
 
 @Data
@@ -25,7 +26,7 @@ public class ShipmentDTO {
     private BigDecimal total;
 
     @NotBlank(message = "sendDate es obligatorio")
-    private Date sendDate;
+    private Calendar sendDate;
 
     @NotBlank(message = "address es obligatorio")
     private String address;
