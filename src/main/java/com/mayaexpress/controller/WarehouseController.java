@@ -116,7 +116,7 @@ public class WarehouseController {
 
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @GetMapping("/{id}/trips")
     public ResponseEntity<ResponseEntity> getTrips(@Valid @PathVariable Integer id){
         try{

@@ -13,7 +13,7 @@ import java.util.List;
 public interface TripRepository extends JpaRepository<Trip, Integer> {
 
     @Query(value="SELECT new com.mayaexpress.dto.response.TripByWarehouse(" +
-            "t.id, r.id, t.currentWeight, r.awayWarehouse, t.date,r.isDeparture) FROM Trip t JOIN Route r ON t.route=r " +
+            "t.id, r.id, t.currentWeight, r.awayWarehouse, t.date, r.isDeparture,(r.homeWarehouse=:warehouse)) FROM Trip t JOIN Route r ON t.route=r " +
             "WHERE r.awayWarehouse=:warehouse OR r.homeWarehouse=:warehouse")
     List<TripByWarehouse> getTripsByWarehouse(@Param("warehouse") Warehouse warehouse);
 

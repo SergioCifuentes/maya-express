@@ -1,5 +1,6 @@
 package com.mayaexpress.service;
 
+import com.mayaexpress.dto.response.TripByWarehouse;
 import com.mayaexpress.entity.Department;
 import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.exception.APIException;
@@ -102,7 +103,9 @@ public class WarehouseService {
         if(warehouseOptional.isEmpty()){
             throw new ResourceNotFoundException("Warehouse","ID",id);
         }
-        return ResponseEntity.ok().body(tripRepository.getTripsByWarehouse(warehouseOptional.get()));
+        List<TripByWarehouse> tripByWarehouses=tripRepository.getTripsByWarehouse(warehouseOptional.get());
+
+        return ResponseEntity.ok().body(tripByWarehouses);
 
     }
 
