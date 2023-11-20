@@ -13,7 +13,7 @@ public class CommonParams {
 
     public CommonParams() {
         this.page = 0;
-        this.max = 10;
+        this.max = 10000;
         this.pagination = true;
     }
 }
