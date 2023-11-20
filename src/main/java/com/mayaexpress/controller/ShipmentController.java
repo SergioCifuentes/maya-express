@@ -86,7 +86,7 @@ public class ShipmentController {
     }
 
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @PostMapping("/send")
     public ResponseEntity<Shipment> sendShipment(@Valid @RequestBody ShipmentDTO shipmentDTO){
         try {
@@ -114,6 +114,7 @@ public class ShipmentController {
     @PostMapping("/entrance")
     public ResponseEntity<List<ShipmentHistory>> registerEntrance(@Valid @RequestBody WarehouseMovementDTO warehouseMovementDTO) {
         try {
+
             List<ShipmentHistory> newHistory = shipmentService.registerEntrance(warehouseMovementDTO);
             return ResponseEntity.ok(newHistory);
         } catch (InternalServerException ex) {

@@ -54,7 +54,8 @@ public class EconomicService {
 
     public ShipmentPayment createShipmentPayment(Shipment shipment, Boolean isPaid, BigDecimal total, Date date){
         ShipmentPayment shipmentPayment = new ShipmentPayment(null, shipment,isPaid, total, date);
-        return shipmentPaymentRespository.save(shipmentPayment);
+        return shipmentPayment;
+        //return shipmentPaymentRespository.save(shipmentPayment);
     }
 
     public ShipmentPayment payShipment(Integer id){
