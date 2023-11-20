@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ShipmentTripRepository extends JpaRepository<ShipmentTrip, Integer> {
@@ -18,4 +19,6 @@ public interface ShipmentTripRepository extends JpaRepository<ShipmentTrip, Inte
     Integer getNumber(@Param("shipment") Shipment shipment, @Param("trip") Trip trip);
 
     Optional<ShipmentTrip> findByShipmentAndTrip(Shipment shipment, Trip trip);
+
+    List<ShipmentTrip> findAllByTripId(Integer id);
 }
