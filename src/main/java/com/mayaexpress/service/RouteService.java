@@ -3,12 +3,10 @@ package com.mayaexpress.service;
 import com.mayaexpress.dto.RouteDTO;
 import com.mayaexpress.dto.request.TripCreationDTO;
 import com.mayaexpress.entity.*;
+import com.mayaexpress.entity.Package;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.exception.ResourceNotFoundException;
-import com.mayaexpress.repository.RouteRepository;
-import com.mayaexpress.repository.ShipmentHistoryRepository;
-import com.mayaexpress.repository.ShipmentTripRepository;
-import com.mayaexpress.repository.TripRepository;
+import com.mayaexpress.repository.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,14 +26,18 @@ public class RouteService {
 
     private  final ShipmentTripRepository shipmentTripRepository;
 
+    private final ShipmentRepository shipmentRepository;
+
     @Value("${route.max.wait-time}")
     private Integer waitTime;
 
-    public RouteService(RouteRepository routeRepository, TripRepository tripRepository, ShipmentHistoryRepository shipmentHistoryRepository, ShipmentTripRepository shipmentTripRepository) {
+    public RouteService(RouteRepository routeRepository, TripRepository tripRepository, ShipmentHistoryRepository shipmentHistoryRepository,
+                        ShipmentTripRepository shipmentTripRepository, ShipmentRepository shipmentRepository) {
         this.routeRepository = routeRepository;
         this.tripRepository = tripRepository;
         this.shipmentHistoryRepository = shipmentHistoryRepository;
         this.shipmentTripRepository = shipmentTripRepository;
+        this.shipmentRepository=shipmentRepository;
     }
 
 
@@ -103,7 +105,7 @@ public class RouteService {
         if (shipmentTrips!=null){
             System.out.println(shipmentTrips);
             shipmentTrips.getTripList().forEach(System.out::println);
-            saveRoute(shipmentTrips,shipment,shipment.getSendDate());
+            saveRoute(shipmentTrips,shipment,shipment.getSendDate(),weight);
         }else{
             throw new APIException(HttpStatus.CONFLICT,"No se encontro ruta posible");
         }
@@ -145,13 +147,20 @@ public class RouteService {
 
         return best;
     }
-    private void saveRoute(RouteDTO route, Shipment shipment,Date date){
+    private void saveRoute(RouteDTO route, Shipment shipment,Date date, Double weight){
         ShipmentHistory sh = new ShipmentHistory(null,shipment,HistoryState.ENTRANCE,date,shipment.getSendingWarehouse(),route.getTripList().get(0));
         shipmentHistoryRepository.save(sh);
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        c.add(Calendar.HOUR,route.getTime());
+        shipment.setExpectedDate(c.getTime());
+        shipmentRepository.save(shipment);
         int i =1;
         for (Trip tr:route.getTripList()) {
+            tr.setCurrentWeight((float) (tr.getCurrentWeight()+weight));
             ShipmentTrip st = new ShipmentTrip(null, shipment,i,tr);
               i++;
+              tripRepository.save(tr);
               shipmentTripRepository.save(st);
         }
 
@@ -194,5 +203,13 @@ public class RouteService {
                         trip.getDate().compareTo(c.getTime())==0)
                 .collect(Collectors.toList());
         return trips;
+    }
+
+    public List<Trip> getTripsByShipment(Integer id) {
+        return tripRepository.getTripsByShipment(id);
+    }
+
+    public List<Package> getPackageByShipment(Integer id) {
+        return shipmentRepository.getPackagesById(id);
     }
 }

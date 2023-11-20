@@ -1,5 +1,6 @@
 package com.mayaexpress.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -25,6 +26,7 @@ public class Vehicle {
     @Column(name="vehicle_type")
     private VehicleType vehicleType;
 
+    @JsonIgnore
     @ManyToOne
     private Warehouse warehouse;
 

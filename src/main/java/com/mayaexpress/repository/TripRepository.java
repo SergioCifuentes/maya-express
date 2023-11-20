@@ -4,6 +4,7 @@ import com.mayaexpress.dto.response.TripByWarehouse;
 import com.mayaexpress.entity.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -15,4 +16,7 @@ public interface TripRepository extends JpaRepository<Trip, Integer> {
     List<TripByWarehouse> getTripsByWarehouse(Integer warehouse);
 
     List<Trip> getTripsByDateAfterAndDateBefore(Date dateAfter, Date before);
+
+    @Query(value = "SELECT t FROM Trip t INNER JOIN ShipmentTrip st ON st.trip=t WHERE st.shipment.id=:id")
+    List<Trip> getTripsByShipment(@Param("id") Integer id);
 }
