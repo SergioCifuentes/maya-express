@@ -126,7 +126,7 @@ public class WarehouseController {
         }
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @GetMapping("/branch-by-department/{id}")
     public ResponseEntity<List<Warehouse>> getBranchesByDepartment(@Valid @PathVariable Integer id){
         try{

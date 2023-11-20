@@ -181,7 +181,7 @@ public class ShipmentController {
         }
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/shipments-by-trip/{id}")
     public ResponseEntity<ShipmentTripDTO> getShipmentsByTrip(@Valid @PathVariable Integer id) {
         try {
