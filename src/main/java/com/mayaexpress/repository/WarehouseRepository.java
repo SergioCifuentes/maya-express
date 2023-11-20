@@ -17,4 +17,6 @@ public interface WarehouseRepository extends JpaRepository<Warehouse, Integer> {
     Page<Warehouse> findAllByIsEnableIsFalse(Pageable pageable);
 
     List<Warehouse> findAllByIsBranchIsTrue();
+
+    List<Warehouse> findAllByIsBranchIsTrueAndDepartment_Id(Integer department_id);
 }

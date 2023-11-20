@@ -1,18 +1,20 @@
 package com.mayaexpress.service;
 
 import com.mayaexpress.dto.request.VehicleDTO;
+import com.mayaexpress.dto.response.ShipmentTripDTO;
+import com.mayaexpress.entity.ShipmentTrip;
 import com.mayaexpress.entity.Warehouse;
 import com.mayaexpress.entity.Vehicle;
 import com.mayaexpress.exception.APIException;
 import com.mayaexpress.exception.ResourceNotFoundException;
+import com.mayaexpress.repository.ShipmentTripRepository;
 import com.mayaexpress.repository.VehicleRepository;
 import com.mayaexpress.repository.WarehouseRepository;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class ManagementService {
@@ -20,10 +22,12 @@ public class ManagementService {
     private final WarehouseRepository warehouseRepository;
 
     private final VehicleRepository vehicleRepository;
+    private final ShipmentTripRepository shipmentTripRepository;
 
-    public ManagementService(WarehouseRepository warehouseRepository, VehicleRepository vehicleRepository) {
+    public ManagementService(WarehouseRepository warehouseRepository, VehicleRepository vehicleRepository, ShipmentTripRepository shipmentTripRepository) {
         this.warehouseRepository = warehouseRepository;
         this.vehicleRepository = vehicleRepository;
+        this.shipmentTripRepository = shipmentTripRepository;
     }
 
 
@@ -67,5 +71,15 @@ public class ManagementService {
         Optional<Vehicle> vehicle = vehicleRepository.findById(id);
         if (vehicle.isEmpty()) throw new ResourceNotFoundException("Vehicle","id",id);
         vehicleRepository.delete(vehicle.get());
+    }
+
+    public ShipmentTripDTO getShipmentsByTrip(Integer idTrip) {
+        ShipmentTripDTO shipmentTripDTO = new ShipmentTripDTO();
+        shipmentTripDTO.setIdTrip(idTrip);
+        shipmentTripDTO.setShipments(new ArrayList<>());
+        shipmentTripRepository.findAllByTripId(idTrip).forEach(shipmentTrip -> {
+            shipmentTripDTO.getShipments().add(shipmentTrip.getShipment().getId());
+        });
+        return shipmentTripDTO;
     }
 }
