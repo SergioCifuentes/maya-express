@@ -1,7 +1,9 @@
 package com.mayaexpress.repository;
 
 import com.mayaexpress.dto.response.PackagesByRegionDTO;
+import com.mayaexpress.entity.Package;
 import com.mayaexpress.entity.Shipment;
+import com.mayaexpress.entity.Trip;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
@@ -49,5 +51,7 @@ public interface ShipmentRepository extends JpaRepository<Shipment,Integer> {
             @Param("end_date") String endDate,
             @Param("warehouseId") Integer warehouseId
     );
+    @Query(value = "SELECT p FROM Package p WHERE p.shipment.id=:id")
 
+    List<Package> getPackagesById(Integer id);
 }

@@ -243,8 +243,11 @@ public class ShipmentService {
             throw new ResourceNotFoundException("Shipment", "ID", id);
         }
         Shipment shipment = shipmentRepository.findById(id).get();
-        optionalShipmentHistoryDTO.get().setDate(shipment.getExpectedDate());
-        return optionalShipmentHistoryDTO.get();
+        ShipmentHistoryDTO shipmentHistoryDTO=optionalShipmentHistoryDTO.get();
+        shipmentHistoryDTO.setDate(shipment.getExpectedDate());
+        shipmentHistoryDTO.setTrips(routeService.getTripsByShipment(id));
+        shipmentHistoryDTO.setPackages(routeService.getPackageByShipment(id));
+        return shipmentHistoryDTO;
     }
 
     public List<GuideHistoryDTO> getGuideHistory(Integer destination) {
