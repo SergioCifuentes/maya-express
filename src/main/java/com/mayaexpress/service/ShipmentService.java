@@ -54,7 +54,8 @@ public class ShipmentService {
 
     private final ShipmentTripRepository shipmentTripRepository;
 
-    private final TripRepository tripRepository;
+    private final RouteService routeService;
+
 
     @Value("${url-maya-express-qr}")
     private String urlLocalize;
@@ -70,7 +71,7 @@ public class ShipmentService {
                             WarehouseRepository warehouseRepository,
                            ShipmentRepository shipmentRepository, PackageRepository packageRepository,
                            ShipmentHistoryRepository shipmentHistoryRepository, ShipmentTripRepository shipmentTripRepository,
-                           TripRepository tripRepository) {
+                           RouteService routeService) {
         this.destinationRepository = destinationRepository;
         this.warehouseRepository=warehouseRepository;
         this.shipmentRepository=shipmentRepository;
@@ -78,7 +79,7 @@ public class ShipmentService {
         this.economicService=economicService;
         this.shipmentHistoryRepository=shipmentHistoryRepository;
         this.shipmentTripRepository= shipmentTripRepository;
-        this.tripRepository= tripRepository;
+        this.routeService=routeService ;
     }
 
 
@@ -117,17 +118,20 @@ public class ShipmentService {
         Warehouse warehouse= getWarehouse(shipmentDTO.getBranchId());
         Warehouse warehouseRec = getWarehouse(shipmentDTO.getReceiveBranchId());
         Shipment shipment = new Shipment(null,warehouse, shipmentDTO.getClientSendingName(), shipmentDTO.getClientReceiveName(),
-                shipmentDTO.getSendDate(),shipmentDTO.getAddress(),warehouseRec,null,null,null);
+                shipmentDTO.getSendDate().getTime(),shipmentDTO.getAddress(),warehouseRec,null,null,null);
         shipment=shipmentRepository.save(shipment);
+        System.out.println(shipmentDTO.getSendDate().getTime());
         Set<Package> packs = new HashSet<>();
+
         for (PackageDTO pa: shipmentDTO.getPackages()) {
             Package pack = new Package(null, pa.getWeightLbs(),pa.getDescription(), shipment,pa.getSubTotal());
             packs.add(packageRepository.save(pack));
         }
         shipment.setShipmentPayment(economicService.createShipmentPayment(shipment,shipmentDTO.getIsPaid(),shipmentDTO.getTotal(),
                 (shipmentDTO.getIsPaid())?shipmentDTO.getPayDate():null));
-
+        routeService.findRoute(shipment,shipmentDTO.getTotal().doubleValue());
         shipment.setPackages(packs);
+
         return shipment;
     }
 
@@ -206,14 +210,12 @@ public class ShipmentService {
         return optionalWarehouse.get();
     }
     public Trip getTrip(Integer id) {
-        Optional<Trip> optionalTrip = tripRepository.findById(id);
-        if (optionalTrip.isEmpty()) {
-            throw new ResourceNotFoundException("Trip", "ID", id);
-        }
-        return optionalTrip.get();
+        return routeService.getTrip(id);
     }
 
     public String getQR(Integer id) throws IOException, WriterException {
+        Optional<Shipment> shipment = shipmentRepository.findById(id);
+        if (shipment.isEmpty()) return "";
         String data = urlLocalize + id.toString();
         Map<EncodeHintType, Object> hintMap = new HashMap<>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);
@@ -241,8 +243,11 @@ public class ShipmentService {
             throw new ResourceNotFoundException("Shipment", "ID", id);
         }
         Shipment shipment = shipmentRepository.findById(id).get();
-        optionalShipmentHistoryDTO.get().setDate(shipment.getExpectedDate());
-        return optionalShipmentHistoryDTO.get();
+        ShipmentHistoryDTO shipmentHistoryDTO=optionalShipmentHistoryDTO.get();
+        shipmentHistoryDTO.setDate(shipment.getExpectedDate());
+        shipmentHistoryDTO.setTrips(routeService.getTripsByShipment(id));
+        shipmentHistoryDTO.setPackages(routeService.getPackageByShipment(id));
+        return shipmentHistoryDTO;
     }
 
     public List<GuideHistoryDTO> getGuideHistory(Integer destination) {
@@ -252,5 +257,9 @@ public class ShipmentService {
                 .map(GuideHistoryDTO::new)
                 .filter(dto -> dto.getState() != HistoryState.RECEIVED)
                 .collect(Collectors.toList());
+    }
+
+    public Integer createTrips(TripCreationDTO tripCreationDTO){
+        return routeService.createTrips(tripCreationDTO);
     }
 }

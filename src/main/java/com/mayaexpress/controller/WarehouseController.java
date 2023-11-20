@@ -126,4 +126,13 @@ public class WarehouseController {
         }
     }
 
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @GetMapping("/branch-by-department/{id}")
+    public ResponseEntity<List<Warehouse>> getBranchesByDepartment(@Valid @PathVariable Integer id){
+        try{
+            return ResponseEntity.ok(warehouseService.getBranchesById(id));
+        }catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
 }

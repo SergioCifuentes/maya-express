@@ -1,11 +1,14 @@
 package com.mayaexpress.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
 
+@Getter
 @Entity(name="Package")
 @Table(name="PACKAGE")
 @AllArgsConstructor
@@ -23,6 +26,7 @@ public class Package {
     @Column(name="description", nullable = false)
     private String description;
 
+    @JsonIgnore
     @ManyToOne(optional = false)
     private Shipment shipment;
 
