@@ -120,6 +120,7 @@ public class WarehouseController {
     @GetMapping("/{id}/trips")
     public ResponseEntity<ResponseEntity> getTrips(@Valid @PathVariable Integer id){
         try{
+
             return ResponseEntity.ok(warehouseService.getTrips(id));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
