@@ -102,7 +102,7 @@ public class WarehouseService {
         if(warehouseOptional.isEmpty()){
             throw new ResourceNotFoundException("Warehouse","ID",id);
         }
-        return ResponseEntity.ok().body(tripRepository.getTripsByWarehouse(id));
+        return ResponseEntity.ok().body(tripRepository.getTripsByWarehouse(warehouseOptional.get()));
 
     }
 
