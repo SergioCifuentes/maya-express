@@ -33,7 +33,7 @@ public class AdminController {
         this.vehicleService = vehicleService;
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN')")
+    @PreAuthorize("hasAuthority('ADMIN')")
     @PostMapping("/employee")
     public ResponseEntity<Employee> create(@Valid @RequestBody Employee employee){
         try {

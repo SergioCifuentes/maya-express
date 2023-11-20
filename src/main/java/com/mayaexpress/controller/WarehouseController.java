@@ -81,9 +81,9 @@ public class WarehouseController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all/")
-    public ResponseEntity<Page<Warehouse>> getAll(CommonParams commonParams){
+    public ResponseEntity<List<Warehouse>> getAll(){
         try {
-            return ResponseEntity.ok(warehouseService.getAll(commonParams.getPage(), commonParams.getMax(), commonParams.isPagination()));
+            return ResponseEntity.ok(warehouseService.getAll());
         } catch (InternalServerException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }

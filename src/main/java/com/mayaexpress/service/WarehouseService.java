@@ -45,8 +45,8 @@ public class WarehouseService {
         warehouseRepository.save(warehouse);
     }
 
-    public Page<Warehouse> getAll(int page, int size, boolean pagination) {
-        return  warehouseRepository.findAll(pagination ? PageRequest.of(page,size) : Pageable.unpaged());
+    public List<Warehouse> getAll() {
+        return  warehouseRepository.findAll();
     }
 
     public Page<Warehouse> getAllActivates(int page, int size, boolean pagination){
