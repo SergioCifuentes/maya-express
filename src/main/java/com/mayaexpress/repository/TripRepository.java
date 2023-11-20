@@ -21,4 +21,7 @@ public interface TripRepository extends JpaRepository<Trip, Integer> {
 
     @Query(value = "SELECT t FROM Trip t INNER JOIN ShipmentTrip st ON st.trip=t WHERE st.shipment.id=:id")
     List<Trip> getTripsByShipment(@Param("id") Integer id);
+
+    @Query(value = "SELECT t FROM Trip t WHERE t.currentWeight!=0")
+    List<Trip> getTripsNotZero();
 }

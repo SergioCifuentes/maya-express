@@ -1,6 +1,7 @@
 package com.mayaexpress.controller;
 
 import com.mayaexpress.dto.request.DateDTO;
+import com.mayaexpress.dto.response.LightTripsDTO;
 import com.mayaexpress.dto.response.PackagesByDepartmentDTO;
 import com.mayaexpress.dto.response.PackagesByRegionDTO;
 import com.mayaexpress.dto.response.WarehouseDTO;
@@ -82,4 +83,15 @@ public class DecisionalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+
+    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @GetMapping("/get-light-trips")
+    public ResponseEntity<List<LightTripsDTO>> getLightTrips(@Valid @RequestBody DateDTO dateDTO) {
+        try {
+            return ResponseEntity.ok(decisionalService.getLightTrips());
+        } catch (Exception e){
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
 }
