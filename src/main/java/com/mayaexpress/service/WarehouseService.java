@@ -105,4 +105,8 @@ public class WarehouseService {
         return ResponseEntity.ok().body(tripRepository.getTripsByWarehouse(id));
 
     }
+
+    public List<Warehouse> getBranchesById(Integer idDepartment) {
+        return warehouseRepository.findAllByIsBranchIsTrueAndDepartment_Id(idDepartment);
+    }
 }

@@ -214,6 +214,8 @@ public class ShipmentService {
     }
 
     public String getQR(Integer id) throws IOException, WriterException {
+        Optional<Shipment> shipment = shipmentRepository.findById(id);
+        if (shipment.isEmpty()) return "";
         String data = urlLocalize + id.toString();
         Map<EncodeHintType, Object> hintMap = new HashMap<>();
         hintMap.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.L);

@@ -64,6 +64,7 @@ public class RouteService {
         Calendar c=Calendar.getInstance();
         for (Route route: routes){
             if (route.getDepartureDay().ordinal()==day){
+
                 Calendar newCalendar= (Calendar) date.clone();
                 c.setTime(route.getDepartureTime());
                 int hour =c.get(Calendar.HOUR_OF_DAY);
@@ -71,6 +72,7 @@ public class RouteService {
                 newCalendar.set(Calendar.HOUR_OF_DAY,hour);
 
                 trips.add(new Trip(null, 0f, route, newCalendar.getTime()));
+
             }
 
         }
