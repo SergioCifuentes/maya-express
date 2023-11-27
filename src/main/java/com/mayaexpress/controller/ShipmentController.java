@@ -71,7 +71,7 @@ public class ShipmentController {
 
     }
 
-    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @GetMapping("/price/{idOrigen}/{idDestination}")
     public ResponseEntity<Price> getPriceByDepartments(@Valid @PathVariable Integer idOrigen,@Valid @PathVariable Integer idDestination){
         return ResponseEntity.ok(shipmentService.getPriceByDepartments(idOrigen,idDestination));

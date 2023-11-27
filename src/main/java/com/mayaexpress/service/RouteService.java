@@ -97,6 +97,9 @@ public class RouteService {
         Date maxDate= calendar.getTime();
         List<Trip> trips=tripRepository.getTripsByDateAfterAndDateBefore(shipment.getSendDate(),maxDate);
         trips=removeTripsByWarehouse(shipment.getSendingWarehouse(),trips);
+        System.out.println(trips.size());
+        trips=removeTripsByWeight(trips,weight);
+        System.out.println(trips.size());
         List<Trip> tryTrips=getTripsToTry(shipment.getSendingWarehouse(),trips);
 
         HashMap<Warehouse,Integer> hoursForWarehouse=new HashMap<>();
@@ -127,7 +130,6 @@ public class RouteService {
             tripsRemainCopy=removeTripsByWarehouse(destinationWarehouse,tripsRemainCopy);
             Integer timeTo = getTimeToTripDestination(trip,sendDate);
             if(bestTime<=currentTime||(hoursForWarehouse.containsKey(destinationWarehouse)&&timeTo>hoursForWarehouse.get(destinationWarehouse))){
-
                 continue;}
             else{
                 hoursForWarehouse.put(destinationWarehouse,timeTo);
@@ -202,6 +204,13 @@ public class RouteService {
                 .filter(trip -> trip.getDate().after(c.getTime())||
                         trip.getDate().compareTo(c.getTime())==0)
                 .collect(Collectors.toList());
+        return trips;
+    }
+
+    private List<Trip> removeTripsByWeight(List<Trip> trips, Double weight){
+        trips = trips.stream()
+                .filter(trip -> trip.getCurrentWeight()+weight<=trip.getRoute().getVehicle().getMaxWeight()
+                ).collect(Collectors.toList());
         return trips;
     }
 

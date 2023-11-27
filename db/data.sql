@@ -556,30 +556,6 @@ insert into price (cost_x_lb, sending_cost, destination, origin) values (13.17, 
 insert into price (cost_x_lb, sending_cost, destination, origin) values (15.04, 46.05, 22, 21);
 insert into price (cost_x_lb, sending_cost, destination, origin) values (15.32, 32.28, 22, 22);
 
-INSERT INTO destination (name, region)
-VALUES
-    ('Guatemala', 'Metropolitana'),
-    ('Baja Verapaz', 'Norte'),
-    ('Alta Verapaz', 'Norte'),
-    ('El Progreso', 'Nororiental'),
-    ('Izabal', 'Nororiental'),
-    ('Zacapa', 'Nororiental'),
-    ('Chiquimula', 'Nororiental'),
-    ('Santa Rosa', 'Suroriental'),
-    ('Jalapa', 'Suroriental'),
-    ('Jutiapa', 'Suroriental'),
-    ('Sacatepéquez', 'Central'),
-    ('Chimaltenango', 'Central'),
-    ('Escuintla', 'Central'),
-    ('Sololá', 'Suroccidental'),
-    ('Totonicapán', 'Suroccidental'),
-    ('Quetzaltenango', 'Suroccidental'),
-    ('Suchitepéquez', 'Suroccidental'),
-    ('Retalhuleu', 'Suroccidental'),
-    ('San Marcos', 'Suroccidental'),
-    ('Huehuetenango', 'Noroccidental'),
-    ('Quiché', 'Noroccidental'),
-    ('Petén', 'Petén');
 
 --Warehouse
 
@@ -868,5 +844,15 @@ INSERT INTO public.cost(
 	(1, '2023-11-21', 'Luz', 4, 9),
 	(1, '2023-11-11', 'Internet', 3, 10),
 	(1, '2023-11-01', 'Gasolina', 2, 10);
+
+CREATE TABLE ROLE (
+    id int,
+    name VARCHAR(10)
+);
+
+INSERT INTO public.ROLE(id, name)
+VALUES (0,'ADMIN'),
+       (1,'IT'),
+       (2,'EMPLOYEE');
 
 

@@ -81,9 +81,9 @@ public class WarehouseController {
 
     @PreAuthorize("hasAuthority('ADMIN')")
     @GetMapping("/all/")
-    public ResponseEntity<Page<Warehouse>> getAll(CommonParams commonParams){
+    public ResponseEntity<List<Warehouse>> getAll(){
         try {
-            return ResponseEntity.ok(warehouseService.getAll(commonParams.getPage(), commonParams.getMax(), commonParams.isPagination()));
+            return ResponseEntity.ok(warehouseService.getAll());
         } catch (InternalServerException ex) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
@@ -116,10 +116,11 @@ public class WarehouseController {
 
     }
 
-    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
+    //@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('IT')")
     @GetMapping("/{id}/trips")
     public ResponseEntity<ResponseEntity> getTrips(@Valid @PathVariable Integer id){
         try{
+
             return ResponseEntity.ok(warehouseService.getTrips(id));
         }catch (Exception e){
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

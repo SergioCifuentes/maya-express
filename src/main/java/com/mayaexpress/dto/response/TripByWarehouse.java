@@ -18,6 +18,12 @@ public class TripByWarehouse {
     private Date date;
     private Boolean isDeparture;
 
-
-
+    public TripByWarehouse(Integer tripId, Integer vehicleId, Float currentWeight, Warehouse warehouseToOrFrom, Date date, Boolean isDeparture, Boolean isHome) {
+        this.tripId = tripId;
+        this.vehicleId = vehicleId;
+        this.currentWeight = currentWeight;
+        this.warehouseToOrFrom = warehouseToOrFrom;
+        this.date = date;
+        this.isDeparture = !(isDeparture^isHome);
+    }
 }

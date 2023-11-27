@@ -2,11 +2,9 @@ package com.mayaexpress.service;
 
 import com.mayaexpress.dto.request.DateDTO;
 import com.mayaexpress.dto.response.*;
+import com.mayaexpress.entity.Trip;
 import com.mayaexpress.entity.Warehouse;
-import com.mayaexpress.repository.EmployeeRepository;
-import com.mayaexpress.repository.PackageRepository;
-import com.mayaexpress.repository.ShipmentRepository;
-import com.mayaexpress.repository.VehicleRepository;
+import com.mayaexpress.repository.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -26,6 +24,8 @@ public class DecisionalService {
     private final EmployeeRepository employeeRepository;
     private final VehicleRepository vehicleRepository;
     private final WarehouseService warehouseService;
+
+    private final TripRepository tripRepository;
 
     @Value("${descisional.minimum-packages-by-region}")
     private Integer minimumPackagesByRegion;
@@ -48,12 +48,17 @@ public class DecisionalService {
     @Value("${descisional.minimum-vehicles}")
     private Integer minimumVehicles;
 
-    public DecisionalService (ShipmentRepository shipmentRepository, PackageRepository packageRepository, VehicleRepository vehicleRepository, EmployeeRepository employeeRepository, WarehouseService warehouseService) {
+    @Value("${descisional.percentage-weight}")
+    private Float minimumWeight;
+
+    public DecisionalService (ShipmentRepository shipmentRepository, PackageRepository packageRepository, VehicleRepository vehicleRepository,
+                              EmployeeRepository employeeRepository, WarehouseService warehouseService, TripRepository tripRepository) {
         this.shipmentRepository = shipmentRepository;
         this.packageRepository = packageRepository;
         this.employeeRepository = employeeRepository;
         this.vehicleRepository = vehicleRepository;
         this.warehouseService = warehouseService;
+        this.tripRepository=tripRepository;
     }
 
     public List<PackagesByRegionDTO> getSuggestionRegions(Boolean isOrigin, DateDTO dateDTO) {
@@ -115,4 +120,16 @@ public class DecisionalService {
         });
         return warehouseDTOS;
     }
+    public List<LightTripsDTO> getLightTrips() {
+        List<Trip> tripsNotZero = tripRepository.getTripsNotZero();
+        List<LightTripsDTO> lightTripsDTOS=new ArrayList<>();
+        tripsNotZero.forEach(trip -> {
+            if(trip.getRoute().getVehicle().getMaxWeight()*minimumWeight>trip.getCurrentWeight()){
+                lightTripsDTOS.add(new LightTripsDTO(trip.getId(), trip.getCurrentWeight(),trip.getRoute().getVehicle().getId(),
+                        trip.getRoute().getVehicle().getMaxWeight()));
+            }
+        });
+        return lightTripsDTOS;
+    }
+
 }
